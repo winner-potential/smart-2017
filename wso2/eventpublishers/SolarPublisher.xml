@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eventPublisher name="SolarPublisherLog" statistics="disable"
+  trace="disable" xmlns="http://wso2.org/carbon/eventpublisher">
+  <from streamName="" version="1.0.0"/>
+  <mapping customMapping="enable" type="json">
+    <inline>{
+	"name": {{name}},
+	"timestamp": {{time}},
+	"value": {{value}},
+	"tags": 
+	{
+		"station": {{station}}
+	}
+}</inline>
+  </mapping>
+  <to eventAdapterType="logger">
+    <property name="uniqueId">SolarLog</property>
+  </to>
+</eventPublisher>

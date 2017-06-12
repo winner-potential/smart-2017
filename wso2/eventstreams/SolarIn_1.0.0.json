@@ -1,0 +1,24 @@
+{
+  "name": "SolarIn",
+  "version": "1.0.0",
+  "nickName": "",
+  "description": "Get solar data and send them to formatter",
+  "payloadData": [
+    {
+      "name": "time",
+      "type": "LONG"
+    },
+    {
+      "name": "value",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "station",
+      "type": "STRING"
+    },
+    {
+      "name": "id",
+      "type": "STRING"
+    }
+  ]
+}

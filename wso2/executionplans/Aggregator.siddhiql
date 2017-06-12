@@ -1,0 +1,59 @@
+@Plan:name('Aggregator')
+
+@Plan:statistics('false')
+
+@Plan:trace('false')
+
+define function getID[JavaScript] return long
+{
+	return Math.round((Math.random() * Math.pow(10,16)) + 1);
+};
+
+define function validator[JavaScript] return bool
+{
+	if(data[0]>data[1]-data[2])
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+};
+
+-- time gap for messages to work with
+define function offset[JavaScript] return long
+{
+	return 10000;
+};
+
+define function currentTime[JavaScript] return long
+{
+	var t = new Date();
+	return t.getTime();
+};
+
+@Import('SolarIn:1.0.0')
+define stream solarin (time long, value double, station string, id string);
+
+@Export('Average10sClean:1.0.0')
+define stream averagesclean (time long, energy double, station string, id string);
+
+-- helper objects
+define stream solarinID        (time long, value double, station string, measurementid long, id string);
+define stream msg   		   (time long, value double ,station string, measurementid long, id string);
+
+-- put incoming message with measurementid to solarinID
+from solarin
+select solarin.time as time, solarin.value as value, solarin.station as station, currentTime('') as measurementid, solarin.id as id
+insert into solarinID;
+
+from solarinID[validator(solarinID.time,solarinID.measurementid,offset(''))]
+select solarinID.time as time, solarinID.value as value, solarinID.station as station, currentTime('') as measurementid, solarinID.id as id
+insert current events into msg;
+
+from solarinID#window.length(1) unidirectional join msg#window.time(10 sec)
+on solarinID.station == msg.station
+select solarinID.time as time, avg(msg.value) as energy, msg.station as station, solarinID.id as id
+group by solarinID.measurementid
+insert into averagesclean;

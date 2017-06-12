@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eventPublisher name="SolarPublisherDB" statistics="disable"
+  trace="disable" xmlns="http://wso2.org/carbon/eventpublisher">
+  <from streamName="SolarOut" version="1.0.0"/>
+  <mapping customMapping="enable" type="json">
+    <inline>{
+    "name": {{name}},
+    "timestamp": {{time}},
+    "value": {{value}},
+    "tags": 
+    {
+        "station": {{station}}
+    },
+    "id": {{id}}
+}
+</inline>
+  </mapping>
+  <to eventAdapterType="http">
+    <property name="http.client.method">HttpPost</property>
+    <property name="http.url">http://10.35.12.146:1880/dbmessages</property>
+  </to>
+</eventPublisher>

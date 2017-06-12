@@ -1,0 +1,24 @@
+{
+  "name": "Average10sClean",
+  "version": "1.0.0",
+  "nickName": "",
+  "description": "",
+  "payloadData": [
+    {
+      "name": "time",
+      "type": "LONG"
+    },
+    {
+      "name": "energy",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "station",
+      "type": "STRING"
+    },
+    {
+      "name": "id",
+      "type": "STRING"
+    }
+  ]
+}

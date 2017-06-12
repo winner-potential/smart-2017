@@ -1,0 +1,24 @@
+{
+  "name": "SolarRaw",
+  "version": "1.0.0",
+  "nickName": "",
+  "description": "Get solar data in raw format",
+  "payloadData": [
+    {
+      "name": "time",
+      "type": "STRING"
+    },
+    {
+      "name": "value",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "station",
+      "type": "STRING"
+    },
+    {
+      "name": "id",
+      "type": "STRING"
+    }
+  ]
+}
