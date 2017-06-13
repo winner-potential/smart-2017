@@ -1,0 +1,5 @@
+#!/bin/bash
+
+./cpu "node-red" &
+
+npm start -- --userDir /data

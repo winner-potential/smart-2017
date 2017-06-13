@@ -17,6 +17,11 @@ RUN useradd --home-dir /usr/src/node-red --no-create-home node-red \
     && chown -R node-red:node-red /data \
     && chown -R node-red:node-red /usr/src/node-red
 
+COPY start /usr/src/node-red
+COPY cpu /usr/src/node-red
+
+RUN chmod +x cpu && chmod +x start
+
 USER node-red
 
 # package.json contains Node-RED NPM module and node dependencies
@@ -30,7 +35,6 @@ EXPOSE 1880
 ENV FLOWS=flows.json
 
 COPY settings.js /data/
-
 COPY flows.json /data/
 
-CMD ["npm", "start", "--", "--userDir", "/data"]
+CMD ["./start"]
