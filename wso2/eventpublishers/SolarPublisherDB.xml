@@ -7,7 +7,7 @@
     "name": {{name}},
     "timestamp": {{time}},
     "value": {{value}},
-    "tags": 
+    "tags":
     {
         "station": {{station}}
     },
@@ -17,6 +17,6 @@
   </mapping>
   <to eventAdapterType="http">
     <property name="http.client.method">HttpPost</property>
-    <property name="http.url">http://10.35.12.146:1880/dbmessages</property>
+    <property name="http.url">http://receiver:1880/dbmessages</property>
   </to>
 </eventPublisher>

@@ -1,0 +1,31 @@
+version: "2"
+
+services:
+  receiver:
+    build:
+      context: receiver
+    restart: unless-stopped
+    volumes:
+      - ./volumes/wso2/received:/noderedtest:rw
+    ports:
+      - "1881:1880"
+  test:
+    build:
+      context: wso2
+    restart: unless-stopped
+    volumes:
+      - ./volumes/wso2/process:/noderedtest:rw
+    depends_on:
+      - receiver
+  sender:
+    build:
+      context: sender
+    restart: unless-stopped
+    volumes:
+      - ./volumes/nodered/sended:/noderedtest:rw
+    environment:
+      INSTALLATION: test
+      AMOUNT: 1
+      ENDPOINT: http://test:9763/endpoints/SolarReceiver
+    depends_on:
+      - test

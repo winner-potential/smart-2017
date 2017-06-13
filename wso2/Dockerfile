@@ -49,8 +49,7 @@ COPY eventpublishers/*.xml /mnt/wso2cep-4.2.0/repository/deployment/server/event
 COPY eventreceivers/*.xml /mnt/wso2cep-4.2.0/repository/deployment/server/eventreceivers/
 COPY eventstreams/*.json /mnt/wso2cep-4.2.0/repository/deployment/server/eventstreams/
 COPY executionplans/*.siddhiql /mnt/wso2cep-4.2.0/repository/deployment/server/executionplans/
-RUN bash /usr/local/bin/image-config.sh
-RUN export JAVA_HOME=/mnt/jdk-7u80/
+RUN chmod +x /usr/local/bin/*.sh && /usr/local/bin/image-config.sh
 
 USER wso2user
 WORKDIR /mnt
@@ -58,4 +57,4 @@ WORKDIR /mnt
 # Expose transport ports
 EXPOSE 7611 7711 9763 9443 9611 9711
 
-ENTRYPOINT ["/mnt/wso2cep-4.2.0/bin/wso2server.sh"]
+ENTRYPOINT ["/usr/local/bin/startwso2.sh"]

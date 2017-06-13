@@ -39,8 +39,9 @@ chown -R wso2user:wso2 /mnt
 
 # Setup environment variables
 cat > /etc/profile.d/set_java_home.sh << EOF
-export JAVA_HOME="${java_home_dir}"
-export PATH="${java_home_dir}/bin:\$PATH"
+export JAVA_HOME="${jdk_install_dir}"
+export PATH="${jdk_install_dir}/bin:\$PATH"
 EOF
+chmod +x /etc/profile.d/set_java_home.sh
 
 popd > /dev/null

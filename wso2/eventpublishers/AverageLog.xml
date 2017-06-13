@@ -12,6 +12,6 @@
   </mapping>
   <to eventAdapterType="http">
     <property name="http.client.method">HttpPost</property>
-    <property name="http.url">http://10.35.12.146:1880/averagemessages</property>
+    <property name="http.url">http://receiver:1880/averagemessages</property>
   </to>
 </eventPublisher>
