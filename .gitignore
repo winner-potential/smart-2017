@@ -1,2 +1,4 @@
 node_modules
 volumes
+wso2/jdk-7u80
+wso2/wso2cep-4.2.0
