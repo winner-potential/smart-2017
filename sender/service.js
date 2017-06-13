@@ -8,14 +8,14 @@ var endpoint = url.parse((process.argv.length > 3 ? process.argv[3] : false) || 
 // replication
 var replication = (process.argv.length > 4 ? parseInt(process.argv[4]) : false) || 1;
 
-console.log(JSON.stringify({
-  host: endpoint.hostname,
-  path: endpoint.path,
-  port: endpoint.port,
-  installation: installation,
-  endpoint: endpoint,
-  replication: replication
-}));
+// console.log(JSON.stringify({
+//   host: endpoint.hostname,
+//   path: endpoint.path,
+//   port: endpoint.port,
+//   installation: installation,
+//   endpoint: endpoint,
+//   replication: replication
+// }));
 
 var send = function() {
   var time = new Date();
