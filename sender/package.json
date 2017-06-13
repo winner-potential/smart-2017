@@ -1,0 +1,17 @@
+{
+  "name": "pvsimulator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "service.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "simulation",
+    "photovoltaic"
+  ],
+  "author": "Sebastian Apel",
+  "license": "MIT",
+  "dependencies": {
+  }
+}

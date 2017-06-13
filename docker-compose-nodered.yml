@@ -1,0 +1,33 @@
+version: "2"
+
+services:
+  receiver:
+    build:
+      context: receiver
+    restart: unless-stopped
+    volumes:
+      - ./volumes/nodered/received:/noderedtest:rw
+    ports:
+      - "1881:1880"
+  test:
+    build:
+      context: nodered
+    restart: unless-stopped
+    volumes:
+      - ./volumes/nodered/process:/noderedtest:rw
+    ports:
+      - "1880:1880"
+    depends_on:
+      - receiver
+  sender:
+    build:
+      context: sender
+    restart: unless-stopped
+    volumes:
+      - ./volumes/nodered/sended:/noderedtest:rw
+    environment:
+      INSTALLATION: test
+      AMOUNT: 1
+      ENDPOINT: http://test:1880/endpoints/pvreceiver
+    depends_on:
+      - test

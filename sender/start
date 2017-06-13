@@ -1,0 +1,3 @@
+#!/bin/bash
+
+node service.js $INSTALLATION $ENDPOINT $AMOUNT > /noderedtest/outgoing.json
