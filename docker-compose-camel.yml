@@ -6,15 +6,18 @@ services:
       context: receiver
     restart: unless-stopped
     volumes:
-      - ./volumes/nodered/received:/noderedtest:rw
-    ports:
-      - "1881:1880"
+      - ./volumes/camel/received:/noderedtest:rw
+  deploy:
+    build:
+      context: maven
+    depends_on:
+      - test
   test:
     build:
       context: camel
     restart: unless-stopped
     volumes:
-      - ./volumes/camel/data:/camel:rw
+      - ./volumes/camel/data:/cameltest:rw
     ports:
       - "9990:9990"
       - "8080:8080"
@@ -23,15 +26,15 @@ services:
       WILDFLY_MANAGEMENT_PASSWORD: admin
     depends_on:
       - receiver
-  # sender:
-  #   build:
-  #     context: sender
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ./volumes/nodered/sended:/noderedtest:rw
-  #   environment:
-  #     INSTALLATION: test
-  #     AMOUNT: 1
-  #     ENDPOINT: http://test:1880/endpoints/pvreceiver
-  #   depends_on:
-  #     - test
+  sender:
+    build:
+      context: sender
+    restart: unless-stopped
+    volumes:
+      - ./volumes/camel/sended:/noderedtest:rw
+    environment:
+      INSTALLATION: test
+      AMOUNT: 1
+      ENDPOINT: http://test:8080/datalab-example/endpoints/pvreceiver
+    depends_on:
+      - test
