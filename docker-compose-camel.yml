@@ -6,7 +6,7 @@ services:
       context: receiver
     restart: unless-stopped
     volumes:
-      - ./volumes/camel/received:/noderedtest:rw
+      - camel_receiver:/measurements:rw
   deploy:
     build:
       context: maven
@@ -17,7 +17,7 @@ services:
       context: camel
     restart: unless-stopped
     volumes:
-      - ./volumes/camel/data:/cameltest:rw
+      - camel_test:/measurements:rw
     ports:
       - "9990:9990"
       - "8080:8080"
@@ -31,10 +31,18 @@ services:
       context: sender
     restart: unless-stopped
     volumes:
-      - ./volumes/camel/sended:/noderedtest:rw
+      - camel_sender:/measurements:rw
     environment:
       INSTALLATION: test
       AMOUNT: 1
       ENDPOINT: http://test:8080/datalab-example/endpoints/pvreceiver
     depends_on:
       - test
+
+volumes:
+  camel_sender:
+    driver: local
+  camel_test:
+    driver: local
+  camel_receiver:
+    driver: local

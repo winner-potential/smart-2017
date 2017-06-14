@@ -17,10 +17,10 @@ RUN useradd --home-dir /usr/src/node-red --no-create-home node-red \
     && chown -R node-red:node-red /data \
     && chown -R node-red:node-red /usr/src/node-red
 
-COPY start /usr/src/node-red
-COPY cpu /usr/src/node-red
-
+COPY start cpu /usr/src/node-red/
 RUN chmod +x cpu && chmod +x start
+RUN mkdir -p /measurements && chown -R node-red:node-red /measurements
+VOLUME ["/measurements"]
 
 USER node-red
 

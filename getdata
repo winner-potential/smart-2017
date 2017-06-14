@@ -1,0 +1,15 @@
+#!/bin/bash
+
+PROJECT=${PWD##*/}
+TARGET=$(date +"%s")
+
+mkdir -p data/$TARGET
+
+# Create container with all mounts
+RUNCMD="--rm -v $(pwd)/data/$TARGET:/data"
+COPYCMD="cp -R"
+for i in $(docker volume ls -q | grep $PROJECT); do
+  RUNCMD="$RUNCMD -v '$i:/$i'"
+  COPYCMD="$COPYCMD /$i"
+done
+eval "docker run $RUNCMD busybox $COPYCMD /data/"
