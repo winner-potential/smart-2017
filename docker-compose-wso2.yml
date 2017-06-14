@@ -15,6 +15,8 @@ services:
     restart: unless-stopped
     volumes:
       - wso2_test:/wso2test:Z
+    environment:
+      MEASUREMENT_DELAY: 60
     depends_on:
       - receiver
   sender:
@@ -24,6 +26,7 @@ services:
     volumes:
       - wso2_sender:/measurements:Z
     environment:
+      MEASUREMENT_DELAY: 60
       INSTALLATION: test
       AMOUNT: 1
       ENDPOINT: http://test:9763/endpoints/SolarReceiver

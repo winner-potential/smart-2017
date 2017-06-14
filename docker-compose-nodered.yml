@@ -16,6 +16,8 @@ services:
     restart: unless-stopped
     volumes:
       - nodered_test:/measurements:rw
+    environment:
+      MEASUREMENT_DELAY: 60
 #    Only required for debugging
 #    ports:
 #      - "1880:1880"
@@ -28,6 +30,7 @@ services:
     volumes:
       - nodered_sender:/measurements:rw
     environment:
+      MEASUREMENT_DELAY: 60
       INSTALLATION: test
       AMOUNT: 1
       ENDPOINT: http://test:1880/endpoints/pvreceiver

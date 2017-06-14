@@ -22,6 +22,7 @@ services:
       - "9990:9990"
       - "8080:8080"
     environment:
+      MEASUREMENT_DELAY: 60
       WILDFLY_MANAGEMENT_USER: admin
       WILDFLY_MANAGEMENT_PASSWORD: admin
     depends_on:
@@ -33,6 +34,7 @@ services:
     volumes:
       - camel_sender:/measurements:rw
     environment:
+      MEASUREMENT_DELAY: 60
       INSTALLATION: test
       AMOUNT: 1
       ENDPOINT: http://test:8080/datalab-example/endpoints/pvreceiver
