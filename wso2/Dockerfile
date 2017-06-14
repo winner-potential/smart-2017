@@ -53,7 +53,7 @@ COPY eventpublishers/*.xml /mnt/wso2cep-4.2.0/repository/deployment/server/event
 COPY eventreceivers/*.xml /mnt/wso2cep-4.2.0/repository/deployment/server/eventreceivers/
 COPY eventstreams/*.json /mnt/wso2cep-4.2.0/repository/deployment/server/eventstreams/
 COPY executionplans/*.siddhiql /mnt/wso2cep-4.2.0/repository/deployment/server/executionplans/
-RUN chmod +x /usr/local/bin/*.sh && /usr/local/bin/image-config.sh
+RUN chmod +x /usr/local/bin/*.sh /mnt/wso2cep-4.2.0/bin/wso2server.sh /mnt/jdk-7u80/bin/* && /usr/local/bin/image-config.sh
 RUN mkdir /measurements && chown wso2user:wso2 /measurements
 VOLUME ["/measurements"]
 
