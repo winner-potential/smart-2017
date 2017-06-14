@@ -6,7 +6,7 @@ services:
       context: receiver
     restart: unless-stopped
     volumes:
-      - ./volumes/wso2/received:/noderedtest:rw
+      - wso2_receiver:/noderedtest:Z
     ports:
       - "1881:1880"
   test:
@@ -14,7 +14,7 @@ services:
       context: wso2
     restart: unless-stopped
     volumes:
-      - ./volumes/wso2/process:/noderedtest:rw
+      - wso2_test:/wso2test:Z
     depends_on:
       - receiver
   sender:
@@ -22,10 +22,17 @@ services:
       context: sender
     restart: unless-stopped
     volumes:
-      - ./volumes/nodered/sended:/noderedtest:rw
+      - wso2_sender:/noderedtest:Z
     environment:
       INSTALLATION: test
       AMOUNT: 1
       ENDPOINT: http://test:9763/endpoints/SolarReceiver
     depends_on:
       - test
+volumes:
+  wso2_receiver:
+    driver: local
+  wso2_sender:
+    driver: local
+  wso2_test:
+    driver: local
