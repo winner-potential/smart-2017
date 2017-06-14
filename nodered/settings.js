@@ -191,7 +191,7 @@ module.exports = {
             // info - record information about the general running of the application + warn + error + fatal errors
             // debug - record information which is more verbose than info + info + warn + error + fatal errors
             // trace - record very detailed logging + debug + info + warn + error + fatal errors
-            level: "info",
+            level: "warn",
             // Whether or not to include metric events in the log output
             metrics: false,
             // Whether or not to include audit events in the log output

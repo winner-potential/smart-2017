@@ -1,23 +1,26 @@
 version: "2"
 
 services:
-  receiver:
+  camelreceiver:
     build:
       context: receiver
     restart: unless-stopped
+#    Only required for debugging
+#    ports:
+#      - "1881:1880"
     volumes:
-      - camel_receiver:/measurements:rw
-  deploy:
+      - camelreceiver:/measurements:rw
+  cameldeploy:
     build:
       context: maven
     depends_on:
-      - test
-  test:
+      - cameltest
+  cameltest:
     build:
       context: camel
     restart: unless-stopped
     volumes:
-      - camel_test:/measurements:rw
+      - cameltest:/measurements:rw
     ports:
       - "9990:9990"
       - "8080:8080"
@@ -26,25 +29,25 @@ services:
       WILDFLY_MANAGEMENT_USER: admin
       WILDFLY_MANAGEMENT_PASSWORD: admin
     depends_on:
-      - receiver
-  sender:
+      - camelreceiver
+  camelsender:
     build:
       context: sender
     restart: unless-stopped
     volumes:
-      - camel_sender:/measurements:rw
+      - camelsender:/measurements:rw
     environment:
       MEASUREMENT_DELAY: 60
       INSTALLATION: test
       AMOUNT: 1
-      ENDPOINT: http://test:8080/datalab-example/endpoints/pvreceiver
+      ENDPOINT: http://cameltest:8080/datalab-example/endpoints/pvreceiver
     depends_on:
-      - test
+      - cameltest
 
 volumes:
-  camel_sender:
+  camelsender:
     driver: local
-  camel_test:
+  cameltest:
     driver: local
-  camel_receiver:
+  camelreceiver:
     driver: local
