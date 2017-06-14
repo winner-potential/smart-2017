@@ -29,7 +29,7 @@ services:
       MEASUREMENT_DELAY: 60
       INSTALLATION: test
       AMOUNT: 1
-      ENDPOINT: http://test:9763/endpoints/SolarReceiver
+      ENDPOINT: http://wso2_test:9763/endpoints/SolarReceiver
     depends_on:
       - test
 volumes:
