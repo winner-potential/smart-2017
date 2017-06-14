@@ -17,6 +17,6 @@
   </mapping>
   <to eventAdapterType="http">
     <property name="http.client.method">HttpPost</property>
-    <property name="http.url">http://wso2_receiver:1880/dbmessages</property>
+    <property name="http.url">http://wso2receiver:1880/dbmessages</property>
   </to>
 </eventPublisher>

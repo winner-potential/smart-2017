@@ -1,41 +1,41 @@
 version: "2"
 
 services:
-  receiver:
+  wso2receiver:
     build:
       context: receiver
     restart: unless-stopped
     volumes:
-      - wso2_receiver:/measurements:Z
+      - wso2receiver:/measurements:Z
     ports:
       - "1881:1880"
-  test:
+  wso2test:
     build:
       context: wso2
     restart: unless-stopped
     volumes:
-      - wso2_test:/wso2test:Z
+      - wso2test:/measurements:Z
     environment:
       MEASUREMENT_DELAY: 60
     depends_on:
-      - receiver
-  sender:
+      - wso2receiver
+  wso2sender:
     build:
       context: sender
     restart: unless-stopped
     volumes:
-      - wso2_sender:/measurements:Z
+      - wso2sender:/measurements:Z
     environment:
       MEASUREMENT_DELAY: 60
       INSTALLATION: test
       AMOUNT: 1
-      ENDPOINT: http://wso2_test:9763/endpoints/SolarReceiver
+      ENDPOINT: http://wso2test:9763/endpoints/SolarReceiver
     depends_on:
-      - test
+      - wso2test
 volumes:
-  wso2_receiver:
+  wso2receiver:
     driver: local
-  wso2_sender:
+  wso2sender:
     driver: local
-  wso2_test:
+  wso2test:
     driver: local
