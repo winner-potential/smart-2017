@@ -54,8 +54,8 @@ COPY eventreceivers/*.xml /mnt/wso2cep-4.2.0/repository/deployment/server/eventr
 COPY eventstreams/*.json /mnt/wso2cep-4.2.0/repository/deployment/server/eventstreams/
 COPY executionplans/*.siddhiql /mnt/wso2cep-4.2.0/repository/deployment/server/executionplans/
 RUN chmod +x /usr/local/bin/*.sh && /usr/local/bin/image-config.sh
-RUN mkdir /wso2test && chown wso2user:wso2 /wso2test
-VOLUME ["/wso2test"]
+RUN mkdir /measurements && chown wso2user:wso2 /measurements
+VOLUME ["/measurements"]
 
 USER wso2user
 WORKDIR /mnt
