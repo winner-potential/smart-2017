@@ -6,7 +6,7 @@ services:
       context: receiver
     restart: unless-stopped
     volumes:
-      - storage_receiver:/noderedtest:Z
+      - wso2_receiver:/noderedtest:Z
     ports:
       - "1881:1880"
   test:
@@ -14,7 +14,7 @@ services:
       context: wso2
     restart: unless-stopped
     volumes:
-      - storage_test:/wso2test:Z
+      - wso2_test:/wso2test:Z
     depends_on:
       - receiver
   sender:
@@ -22,7 +22,7 @@ services:
       context: sender
     restart: unless-stopped
     volumes:
-      - storage_sender:/noderedtest:Z
+      - wso2_sender:/noderedtest:Z
     environment:
       INSTALLATION: test
       AMOUNT: 1
@@ -30,9 +30,9 @@ services:
     depends_on:
       - test
 volumes:
-  storage_receiver:
+  wso2_receiver:
     driver: local
-  storage_sender:
+  wso2_sender:
     driver: local
-  storage_test:
+  wso2_test:
     driver: local
