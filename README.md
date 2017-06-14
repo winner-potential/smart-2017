@@ -1,6 +1,6 @@
 Test setup for different solutions to integrate external systems, transform data, forward them to a database and aggregate information. This setup is implemented with Apache Camel, WS02CEP and Node-RED and utilizes concepts from EIP and CEP.
 
-These files are required for reproduce the setup of a paper on SMART 2017.
+These files are required for reproduce the setup of the paper "Evaluation of Architectural Backbone Technologies for WINNER DataLab" on SMART 2017.
 
 Run Node-RED Test
 ------
