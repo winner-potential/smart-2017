@@ -1,19 +1,8 @@
-Usage
-=====
+# Sender Component
 
-Daten müssen mit import.sh in eine KairosDB geladen werden. Hierfür müssen die Daten von ftp://ftp-cdc.dwd.de/pub/CDC/ verwendet werden. Die Einstrahlungsdaten sind unter /observations_germany/climate/hourly/sun/recent zu finden. Im Ordner data/sun sollen jedoch nur die CSV enthalten sein, die aus den ZIPs zu entnehmen sind. Der Ordner data-example kann in data umbenannt werden und als Beispiel verwendet werden.
+Simple node.js application to send messages. This script will send x messages per second. Each message will have its own ID. Messages within one second will have the same value.
 
-Aufruf für den Import
------
+  node service.js [installationname] [endpointurl] [amountpersecond]
+  node service.js test2 http://localhost:1880/endpoints/pvreceiver 100
 
-  node import.js
-
-Aufruf zum Start des Services
------
-
-  node service.js 853 20 test2 http://localhost:1880/endpoints/pvreceiver
-
-Hinweis
------
-
-- KairosDB muss über localhost:8080 verfügbar sein.
+Logging is placed into stdout.

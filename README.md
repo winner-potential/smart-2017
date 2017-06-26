@@ -2,6 +2,8 @@ Test setup for different solutions to integrate external systems, transform data
 
 These files are required for reproduce the setup of the paper "Evaluation of Architectural Backbone Technologies for WINNER DataLab" on SMART 2017.
 
+The setup includes the sender to produce traffic, three integration setups which receive, enrich, multicast and forward messages to the final receiver. Each setup will generate a simulated database message as well as a message as the result of a simple aggregation method (avg).
+
 Requirements
 ------
 
@@ -11,6 +13,22 @@ Requirements
 - WSO2CEP 4.2.0 from [WSO2](http://wso2.com/products/complex-event-processor/) (only for WSO2 Test)
 
 *Note: It might be possible to run this with much older versions of Docker and Docker-Compose.*
+
+Components
+------
+
+- **Sender** <br/>
+  Simulates traffic and send packages to the configurated endpoint. Generates log with message id and timestamp. See sender/README.md for further details.
+- **Receiver** <br/>
+  Receives average and database messages. Generates log with message id, timestamp and received package. Reduce impreciseness for time measurements by using the same environment as the sender. See receiver/README.md for further details.
+- **WSO2**
+  Handle messages with WSO2CEP. This component requires to download a specific JDK and the environment itself. See wso2/README.md for further details.
+- **Node-RED**
+  Handle messages with Node-RED. See nodered/README.md for further details.
+- **Camel**
+  Handle messages with Apache Camel. See camel/README.md for further details.
+- **Maven**
+  Deployment container with Maven. Used to build, package and deploy the Apache Camel setup into the Apache Camel container. See maven/README.md for further details.
 
 Run Node-RED Test
 ------
@@ -32,6 +50,8 @@ Run WSO2CEP Test
 ------
 
 *Note: This runs everything on one single node. For final results the "wso2test" service should be separated.*
+
+*Important: This component requires to download a specific JDK and the environment itself. See wso2/README.md for further details.*
 
 ```
 # Start test
