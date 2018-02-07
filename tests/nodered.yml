@@ -1,0 +1,31 @@
+version: "2"
+
+services:
+  noderedtest:
+    build:
+      context: ../nodered
+    restart: unless-stopped
+    volumes:
+      - noderedtest:/measurements:rw
+    extra_hosts:
+      - "noderedreceiver:${SENDER}"
+    environment:
+      MEASUREMENT_DELAY: ${DELAY}
+  starter:
+    build:
+      context: ../starter
+    environment:
+      INSTALLATION: ${INSTALLATION}
+      AMOUNT: ${AMOUNT}
+      DELAY: ${DELAY}
+      DURATION: ${DURATION}
+      SENDER: http://${SENDER}:3000
+      ENDPOINT: http://${TESTMASCHINE}:1880/endpoints/pvreceiver
+
+volumes:
+  noderedsender:
+    driver: local
+  noderedtest:
+    driver: local
+  noderedreceiver:
+    driver: local

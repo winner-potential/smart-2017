@@ -43,6 +43,17 @@ services:
       ENDPOINT: http://cameltest:8080/datalab-example/endpoints/pvreceiver
     depends_on:
       - cameltest
+  starter:
+    build:
+      context: starter
+    environment:
+      MEASUREMENT_DELAY: 60
+      INSTALLATION: test
+      AMOUNT: 1
+      DELAY: 10
+      DURATION: 600
+      SENDER: http://camelsender:3000
+      ENDPOINT: http://cameltest:8080/datalab-example/endpoints/pvreceiver
 
 volumes:
   camelsender:
