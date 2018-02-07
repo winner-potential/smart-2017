@@ -14,8 +14,8 @@ set key box linetype 1 linecolor '#000000' linewidth 2
 set key width +1
 set key spacing 1.5
 
-#set terminal pdf size 10cm,6cm enhanced font 'Monospace,8' linewidth 1 rounded dashed
-#set output 'cpu_200.pdf'
+set terminal pdf size 10cm,6cm enhanced font 'Monospace,8' linewidth 1 rounded dashed
+set output 'cpu.pdf'
 
 set xlabel "time [s]"
 set ylabel "cpu load [%]"
@@ -51,10 +51,10 @@ using ($1*factorx-(word(xoffsets,i)+0)):column \
 title word(labels,i) with linespoints \
 pointtype word(symbols,i) lc rgb "black" font myfont
 
-pause -1
+# pause -1
 
 #command line to call
-#gnuplot -e "column=10; files='/home/flo/measurements/cpu_8.txt /home/flo/measurements/cpu_36.txt';labels='aaa bbb';symbols='▽ ▲'" plotcpu.plt 
+#gnuplot -e "column=10; files='/scripts/cpu_8.txt /scripts/cpu_36.txt';labels='aaa bbb';symbols='▽ ▲'" plotcpu.plt 
 
 #symbols
 #+ ▽ ▲ ◆ ●
