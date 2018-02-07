@@ -46,7 +46,7 @@ RUN curl -fSL $MIRROR/$NIFI_BINARY_URL -o $NIFI_BASE_DIR/nifi-$NIFI_VERSION-bin.
 USER root
 
 #measurement needs
-COPY start cpu mem /temp
+COPY start cpu mem /temp/
 RUN chmod +x /temp/start /temp/cpu /temp/mem && mv /temp/* $NIFI_HOME/bin
 
 RUN mkdir -p /measurements && chown -R nifi:nifi /measurements
@@ -67,16 +67,16 @@ EXPOSE 8080 8181
 WORKDIR $NIFI_HOME
 
 # Startup NiFi
-ENTRYPOINT /measureIt/start
+ENTRYPOINT ["bin/start"]
 
-ENTRYPOINT ["bin/nifi.sh"]
-CMD ["run"]
+#ENTRYPOINT ["bin/nifi.sh"]
+#CMD ["run"]
 #ENTRYPOINT ["bin/bash"]
 
 # Within nifi.properties I put the configuration line
 # nifi.flow.configuration.file=./conf/actualflow/flow.xml.gz
 # so that Apache Nifi searches for the right elements.
 
-# start with command sudo docker run -p 8000:8000 -p 8080:8080 -p 8181:8181 -v $(pwd)/flows/actualflow:/opt/nifi/nifi-1.4.0/conf/actualflow -v $(pwd)/flows/archive:/opt/nifi/nifi-1.4.0/conf/archive -v $(pwd)/javascript:/nifiscripts <IMAGE_NAME_OR_ID>
+# start with command sudo docker run -p 8000:8000 -p 8080:8080 -p 8181:8181 -v $(pwd)/flows/actualflow:/opt/nifi/nifi-1.4.0/conf/actualflow -v $(pwd)/flows/archive:/opt/nifi/nifi-1.4.0/conf/archive -v $(pwd)/javascript:/nifiscripts -v /home/flo/measurements:/measurements --name nifi <IMAGE_NAME_OR_ID>
 #
 # to get access via webbrowser on localhost:8080/nifi

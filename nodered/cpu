@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sleep $MEASUREMENT_DELAY && while true; do line=$(top -bn1 -p $(pgrep $1) | sed -n 's/^\( *[0-9][0-9]*.*\)/\1/p'); echo $(date +%s) $line; sleep 1; done >> /measurements/cpu.txt
+sleep $MEASUREMENT_DELAY && while true; do line=$(top -bn1 -p $(pgrep $1) | sed -n 's/^\( *[0-9][0-9]*.*\)/\1/p'); echo $(date +%s) $line; sleep 0.$(printf '%04d' $((10000 - 10#$(date +%4N)))); done >> /measurements/cpu.txt

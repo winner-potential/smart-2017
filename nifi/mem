@@ -1,3 +1,12 @@
 #!/bin/bash
 
-sleep $MEASUREMENT_DELAY && while true; do line=$(jstat -gc $(jps | grep $1 | sed -n 's/^\( *[0-9][0-9]*\).*/\1/p') | sed -n 2p); echo $(date +%s) $line; sleep 1; done >> /measurements/mem.txt
+sleep $MEASUREMENT_DELAY && 
+while true; 
+do
+    for pid in $(jps | grep $1 | sed -n 's/^\( *[0-9][0-9]*\).*/\1/p');
+    do
+        line=$(jstat -gc $pid | sed -n 2p);
+        echo $(date +%s) $line >> /measurements/mem_$pid.txt;
+    done
+    sleep 0.$(printf '%04d' $((10000 - 10#$(date +%4N))));
+done
