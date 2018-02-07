@@ -10,11 +10,6 @@ services:
 #      - "1881:1880"
     volumes:
       - nifireceiver:/measurements:rw
-  nifideploy:
-    build:
-      context: maven
-    depends_on:
-      - nifitest
   nifitest:
     build:
       context: nifi
@@ -34,13 +29,19 @@ services:
     restart: unless-stopped
     volumes:
       - nifisender:/measurements:rw
+    depends_on:
+      - nifitest
+  starter:
+    build:
+      context: starter
     environment:
       MEASUREMENT_DELAY: 60
       INSTALLATION: test
       AMOUNT: 1
-      ENDPOINT: http://cameltest:8080/datalab-example/endpoints/pvreceiver
-    depends_on:
-      - nifitest
+      DELAY: 60
+      DURATION: 600
+      SENDER: http://nifisender:3000
+      ENDPOINT: http://nifitest:8000/
 
 volumes:
   nifisender:
