@@ -8,8 +8,8 @@ services:
     volumes:
       - noderedreceiver:/measurements:rw
 #    Only required for debugging
-#    ports:
-#      - "1881:1880"
+    ports:
+      - "1881:1880"
   noderedtest:
     build:
       context: nodered
@@ -29,13 +29,19 @@ services:
     restart: unless-stopped
     volumes:
       - noderedsender:/measurements:rw
+    depends_on:
+      - noderedtest
+  starter:
+    build:
+      context: starter
     environment:
       MEASUREMENT_DELAY: 60
       INSTALLATION: test
       AMOUNT: 1
+      DELAY: 10
+      DURATION: 600
+      SENDER: http://noderedsender:3000
       ENDPOINT: http://noderedtest:1880/endpoints/pvreceiver
-    depends_on:
-      - noderedtest
 
 volumes:
   noderedsender:

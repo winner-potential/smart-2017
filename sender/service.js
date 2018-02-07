@@ -1,23 +1,11 @@
-var http = require('http');
-var url = require('url');
+const http = require('http')
+const url = require('url')
+const express = require('express')
+const app = express()
 
-// name of installation
-var installation = (process.argv.length > 2 ? process.argv[2] : false) || "unknown";
-// target url
-var endpoint = url.parse((process.argv.length > 3 ? process.argv[3] : false) || "http://localhost:1880/endpoints/pvreceiver");
-// replication
-var replication = (process.argv.length > 4 ? parseInt(process.argv[4]) : false) || 1;
+var idCounter = 0
 
-// console.log(JSON.stringify({
-//   host: endpoint.hostname,
-//   path: endpoint.path,
-//   port: endpoint.port,
-//   installation: installation,
-//   endpoint: endpoint,
-//   replication: replication
-// }));
-
-var send = function() {
+var start = function(installation, endpoint, replication) {
   var time = new Date();
   var E = Math.random(); // J
 
@@ -47,6 +35,32 @@ var send = function() {
   }
 };
 
-setInterval(function() {
-  send();
-}, 1000);
+app.get('/start/:installation/:replication/:duration/:delay', function (req, res) {
+  // name of installation
+  var installation = req.params.installation || "unknown";
+  // target url
+  var endpoint = url.parse(req.query.endpoint || "http://localhost:1880/endpoints/pvreceiver");
+  // replication
+  var replication = parseInt(req.params.replication) || 1;
+  // duration in seconds
+  var duration = parseInt(req.params.duration) || 30;
+  // duration in seconds
+  var delay = parseInt(req.params.delay) || 30;
+
+  var id = ++ idCounter;
+  setTimeout(function() {
+    console.log({'msg': 'start', 'id': id, 'installation': installation, 'endpoint': req.query.endpoint, 'replication': replication, 'duration': duration});
+    var interval = setInterval(function() {
+      start(installation, endpoint, replication);
+    }, 1000);
+  
+    setTimeout(function() {
+      console.log(JSON.stringify({'msg': 'stopped', 'id': id}))
+      clearInterval(interval);
+    }, duration * 1000);
+  }, delay * 1000);
+  res.send();
+})
+
+var port = 3000
+app.listen(port, () => console.log(JSON.stringify({'msg': 'initialized', 'port': port})))

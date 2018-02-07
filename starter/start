@@ -1,0 +1,4 @@
+#!/bin/sh
+
+sleep $DELAY
+wget "$SENDER/start/$INSTALLATION/$AMOUNT/$DURATION/0?endpoint=$ENDPOINT"
