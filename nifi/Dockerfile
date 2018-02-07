@@ -16,7 +16,7 @@
 # under the License.
 #
 
-FROM openjdk:8-jre
+FROM openjdk:8-jdk
 LABEL maintainer "Apache NiFi <dev@nifi.apache.org>"
 
 ARG UID=1000
@@ -45,6 +45,13 @@ RUN curl -fSL $MIRROR/$NIFI_BINARY_URL -o $NIFI_BASE_DIR/nifi-$NIFI_VERSION-bin.
 
 USER root
 
+#measurement needs
+COPY start cpu mem /temp
+RUN chmod +x /temp/start /temp/cpu /temp/mem && mv /temp/* $NIFI_HOME/bin
+
+RUN mkdir -p /measurements && chown -R nifi:nifi /measurements
+VOLUME ["/measurements"]
+
 #Copy the matching configuration from the local repository
 COPY nifi.properties /opt/nifi/nifi-1.4.0/conf/nifi.properties
 RUN chown nifi:nifi /opt/nifi/nifi-1.4.0/conf/nifi.properties
@@ -60,6 +67,8 @@ EXPOSE 8080 8181
 WORKDIR $NIFI_HOME
 
 # Startup NiFi
+ENTRYPOINT /measureIt/start
+
 ENTRYPOINT ["bin/nifi.sh"]
 CMD ["run"]
 #ENTRYPOINT ["bin/bash"]

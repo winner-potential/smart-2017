@@ -1,0 +1,6 @@
+#!/bin/bash
+
+./cpu "java" &
+./mem "jboss-modules.jar" &
+
+bin/nifi.sh run
