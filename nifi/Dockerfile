@@ -77,6 +77,7 @@ ENTRYPOINT ["bin/start"]
 # nifi.flow.configuration.file=./conf/actualflow/flow.xml.gz
 # so that Apache Nifi searches for the right elements.
 
-# start with command sudo docker run -p 8000:8000 -p 8080:8080 -p 8181:8181 -v $(pwd)/flows/actualflow:/opt/nifi/nifi-1.4.0/conf/actualflow -v $(pwd)/flows/archive:/opt/nifi/nifi-1.4.0/conf/archive -v $(pwd)/javascript:/nifiscripts -v /home/flo/measurements:/measurements --name nifi <IMAGE_NAME_OR_ID>
+# start with command 
+# docker run -p 8000:8000 -p 8080:8080 -p 8181:8181 -v $(pwd)/flows/actualflow:/opt/nifi/nifi-1.4.0/conf/actualflow -v $(pwd)/flows/archive:/opt/nifi/nifi-1.4.0/conf/archive -v $(pwd)/javascript:/nifiscripts -v /home/flo/measurements:/measurements --name nifi <IMAGE_NAME_OR_ID>
 #
 # to get access via webbrowser on localhost:8080/nifi
