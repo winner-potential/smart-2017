@@ -44,6 +44,18 @@ import java.io.OutputStream;
 @WritesAttributes({@WritesAttribute(attribute="", description="")})
 public class MyProcessor extends AbstractProcessor {
 
+    private class EnergyData
+    {
+        public long time;
+        public double energy;
+        
+        public EnergyData(long time, double energy) {
+            super();
+            this.time = time;
+            this.energy = energy;
+        }
+    }
+    
     public static final PropertyDescriptor Interval = new PropertyDescriptor
             .Builder().name("Interval")
             .description("Interval for caching messages and calculating average on them")
@@ -73,7 +85,7 @@ public class MyProcessor extends AbstractProcessor {
     private Set<Relationship> relationships;
 
     
-    private Map<Long,Double> measurements = new HashMap<Long, Double>();
+    private Map<String,List<EnergyData>> measurements = new HashMap<>();
     
     private String fieldToAggregate = "";
     private long interval = 0;
@@ -108,6 +120,21 @@ public class MyProcessor extends AbstractProcessor {
         interval = context.getProperty(Interval).asLong();
     }
 
+
+    private List<EnergyData> getList(String station) {
+        List<EnergyData> list = measurements.get(station);
+        if(list == null) {
+            synchronized (measurements) {
+                list = measurements.get(station);
+                if(list == null) {
+                    list = new LinkedList<>();
+                    measurements.put(station, list);
+                }
+            }
+        }
+        return list;
+    }
+    
     @Override
     public void onTrigger(final ProcessContext context, final ProcessSession session) throws ProcessException {
         FlowFile flowFile = session.get();
@@ -117,29 +144,32 @@ public class MyProcessor extends AbstractProcessor {
         
         try
         {
+            String station = flowFile.getAttribute("station");
             String rawtime  = flowFile.getAttribute("time");
             String rawvalue = flowFile.getAttribute(fieldToAggregate);
             long timevalue          = Long.parseLong(rawtime);
             Double measurementvalue = Double.parseDouble(rawvalue);
             
+            List<EnergyData> list = getList(station);
             if(rawtime != null && rawvalue != null){
                 if(timevalue >= System.currentTimeMillis()-interval){
-                    synchronized (measurements) {
-                        measurements.put(timevalue,measurementvalue);
+                    synchronized (list) {
+                        list.add(new EnergyData(timevalue, measurementvalue));
                     }
                 }
             }
             Double avg = 0.0;
             long counter = 0;
             synchronized(measurements){
-                for (Map.Entry<Long, Double> entry : measurements.entrySet()) {
-                    long timeentry = entry.getKey();
-                    Double valueentry = entry.getValue();
+                for(Iterator<EnergyData> it = list.iterator(); it.hasNext(); ) {
+                    EnergyData next = it.next();
+                    long timeentry = next.time;
+                    double valueentry = next.energy;
                     if(timeentry >= System.currentTimeMillis()-interval){
                         counter++;
                         avg = avg + valueentry;
                     }else{
-                        measurements.remove(timeentry);
+                        it.remove();
                     }
                 }
             }
