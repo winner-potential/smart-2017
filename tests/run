@@ -18,7 +18,8 @@ function run {
 
 # List tests
 run nifi.yml 10
-#run nodered.yml 10
+run nodered.yml 10
+run camel.yml 10
+
 #run nodered.yml 50
 #run nodered.yml 100
-run camel.yml 10
