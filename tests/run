@@ -3,7 +3,7 @@
 export DELAY=30 #time in s before test
 export DURATION=30 #time in s running the test
 export WAIT_FOR_TERMINATION=90 #delay + duration * 2
-export SENDER=141.35.12.198 # Change with new network setup!
+export SENDER=192.168.178.26 # Change with new network setup!
 #TESTMASCHINE=$(hostname --ip-address) #TODO Should be working on ubuntu, test before :)
 export TESTMASCHINE=$(scutil --nwi | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -n 1) # Only Mac!
 
@@ -21,3 +21,4 @@ function run {
 run nodered.yml 10
 #run nodered.yml 50
 #run nodered.yml 100
+#run camel.yml 10

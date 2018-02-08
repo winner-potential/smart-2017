@@ -47,7 +47,6 @@ services:
     build:
       context: starter
     environment:
-      MEASUREMENT_DELAY: 60
       INSTALLATION: test
       AMOUNT: 1
       DELAY: 10
