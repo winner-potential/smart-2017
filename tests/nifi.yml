@@ -1,0 +1,32 @@
+version: "2"
+
+services:
+  nifitest:
+    build:
+      context: ../nifi
+    restart: unless-stopped
+    volumes:
+      - nifitest:/measurements:rw
+    ports:
+      - "9990:9990"
+      - "8080:8080"
+      - "8000:8000"
+      - "8181:8181"
+    extra_hosts:
+      - "nifireceiver:${SENDER}"
+    environment:
+      MEASUREMENT_DELAY: ${DELAY}
+  starter:
+    build:
+      context: ../starter
+    environment:
+      INSTALLATION: ${INSTALLATION}
+      AMOUNT: ${AMOUNT}
+      DELAY: ${DELAY}
+      DURATION: ${DURATION}
+      SENDER: http://${SENDER}:3000
+      ENDPOINT: http://${TESTMASCHINE}:8000/
+
+volumes:
+  nifitest:
+    driver: local

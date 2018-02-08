@@ -59,6 +59,12 @@ RUN chown nifi:nifi /opt/nifi/nifi-1.4.0/conf/nifi.properties
 COPY processors/nars/* /opt/nifi/nifi-1.4.0/lib/
 RUN chown nifi:nifi /opt/nifi/nifi-1.4.0/lib/nifi-customProcessor-nar-1.0.nar
 
+COPY flows/actualflow /opt/nifi/nifi-1.4.0/conf/actualflow
+RUN chown -R nifi:nifi /opt/nifi/nifi-1.4.0/conf/actualflow/
+
+COPY javascript /nifiscripts
+RUN chown -R nifi:nifi /nifiscripts/
+
 USER nifi
 
 # Web HTTP Port & Remote Site-to-Site Ports

@@ -1,16 +1,16 @@
 #!/bin/bash
 
 export DELAY=30 #time in s before test
-export DURATION=30 #time in s running the test
-export WAIT_FOR_TERMINATION=90 #delay + duration * 2
+export DURATION=60 #time in s running the test
+export WAIT_FOR_TERMINATION=12000 #delay + duration * 2
 export SENDER=192.168.178.26 # Change with new network setup!
-#TESTMASCHINE=$(hostname --ip-address) #TODO Should be working on ubuntu, test before :)
-export TESTMASCHINE=$(scutil --nwi | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -n 1) # Only Mac!
+export TESTMASCHINE=192.168.178.20 #TODO Should be working on ubuntu, test before :)
+#export TESTMASCHINE=$(scutil --nwi | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -n 1) # Only Mac!
 
 function run {
     export INSTALLATION="$1-$2"
     export AMOUNT=$2
-    docker-compose -f $1 up -d
+    docker-compose -f $1 up -d --build
     sleep $WAIT_FOR_TERMINATION
     docker-compose -f $1 stop
     ../getdata
@@ -18,7 +18,7 @@ function run {
 }
 
 # List tests
-run nodered.yml 10
-#run nodered.yml 50
+#run nodered.yml 10
+run nifi.yml 10
 #run nodered.yml 100
 #run camel.yml 10
