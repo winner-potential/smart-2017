@@ -27,6 +27,9 @@ var start = function(installation, endpoint, replication) {
         "id": id,
         "energy": E
       }));
+      req.on('error', function(err) {
+        console.log(JSON.stringify({"time": new Date().getTime(), "error": err, "id": id}));
+      });
       req.end();
     }, 1000/replication * nr);
   };
@@ -34,6 +37,10 @@ var start = function(installation, endpoint, replication) {
     send(i);
   }
 };
+
+process.on('uncaughtException', function (err) {
+  console.log(JSON.stringify({"time": new Date().getTime(), "error": err}));
+}); 
 
 app.get('/start/:installation/:replication/:duration/:delay', function (req, res) {
   // name of installation

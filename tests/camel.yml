@@ -16,26 +16,22 @@ services:
       - "9990:9990"
       - "8080:8080"
     environment:
-      MEASUREMENT_DELAY: 60
+      MEASUREMENT_DELAY: ${DELAY}
       WILDFLY_MANAGEMENT_USER: admin
       WILDFLY_MANAGEMENT_PASSWORD: admin
-    depends_on:
-      - camelreceiver
+    extra_hosts:
+      - "camelreceiver:${SENDER}"
   starter:
     build:
-      context: starter
+      context: ../starter
     environment:
       INSTALLATION: ${INSTALLATION}
       AMOUNT: ${AMOUNT}
       DELAY: ${DELAY}
       DURATION: ${DURATION}
       SENDER: http://${SENDER}:3000
-      ENDPOINT: http://${TESTMASCHINE}:1880/endpoints/pvreceiver
+      ENDPOINT: http://${TESTMASCHINE}:8080/datalab-example/endpoints/pvreceiver
 
 volumes:
-  camelsender:
-    driver: local
   cameltest:
-    driver: local
-  camelreceiver:
     driver: local

@@ -5,6 +5,8 @@ services:
     build:
       context: ../nodered
     restart: unless-stopped
+    ports:
+      - "1881:1880"
     volumes:
       - noderedtest:/measurements:rw
     extra_hosts:
@@ -20,12 +22,8 @@ services:
       DELAY: ${DELAY}
       DURATION: ${DURATION}
       SENDER: http://${SENDER}:3000
-      ENDPOINT: http://${TESTMASCHINE}:1880/endpoints/pvreceiver
+      ENDPOINT: http://${TESTMASCHINE}:1881/endpoints/pvreceiver
 
 volumes:
-  noderedsender:
-    driver: local
   noderedtest:
-    driver: local
-  noderedreceiver:
     driver: local
