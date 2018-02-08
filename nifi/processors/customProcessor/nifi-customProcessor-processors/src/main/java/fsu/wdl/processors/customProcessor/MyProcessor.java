@@ -73,7 +73,8 @@ public class MyProcessor extends AbstractProcessor {
     private Set<Relationship> relationships;
 
     
-    private HashMap<Long,Double> measurements = new HashMap<Long, Double>();
+    private Map<Long,Double> measurements = new HashMap<Long, Double>();
+    
     private String fieldToAggregate = "";
     private long interval = 0;
     
@@ -121,22 +122,25 @@ public class MyProcessor extends AbstractProcessor {
             long timevalue          = Long.parseLong(rawtime);
             Double measurementvalue = Double.parseDouble(rawvalue);
             
-            
             if(rawtime != null && rawvalue != null){
                 if(timevalue >= System.currentTimeMillis()-interval){
-                    measurements.put(timevalue,measurementvalue);
+                    synchronized (measurements) {
+                        measurements.put(timevalue,measurementvalue);
+                    }
                 }
             }
             Double avg = 0.0;
             long counter = 0;
-            for (Map.Entry<Long, Double> entry : measurements.entrySet()) {
-                long timeentry = entry.getKey();
-                Double valueentry = entry.getValue();
-                if(timeentry >= System.currentTimeMillis()-interval){
-                    counter++;
-                    avg = avg + valueentry;
-                }else{
-                    measurements.remove(timeentry);
+            synchronized(measurements){
+                for (Map.Entry<Long, Double> entry : measurements.entrySet()) {
+                    long timeentry = entry.getKey();
+                    Double valueentry = entry.getValue();
+                    if(timeentry >= System.currentTimeMillis()-interval){
+                        counter++;
+                        avg = avg + valueentry;
+                    }else{
+                        measurements.remove(timeentry);
+                    }
                 }
             }
             
