@@ -2,18 +2,24 @@
 
 export DELAY=30 #time in s before test
 export DURATION=30 #time in s running the test
-export WAIT_FOR_TERMINATION=1000 #delay + duration * 2
+export WAIT_FOR_TERMINATION=90 #delay + duration * 2
 export SENDER="$1"
 export TESTMASCHINE="$2"
 
 function run {
+    echo "Start test for $1-$2 at" $(date)
     export INSTALLATION="$1-$2"
     export AMOUNT=$2
     docker-compose -f $1 up -d --build
     sleep $WAIT_FOR_TERMINATION
     docker-compose -f $1 stop
     ../getdata
-    docker-compose -f $1 down
+    docker-compose -f $1 down -v
+    # Full cleanup, if -v is not enough
+    # docker stop $(docker container list -a -q)
+    # docker rm $(docker container list -a -q)
+    # docker volume prune
+    echo "Stop test for $1-$2 at" $(date)
 }
 
 # List tests
