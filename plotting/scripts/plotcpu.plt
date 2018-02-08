@@ -15,7 +15,7 @@ set key width +1
 set key spacing 1.5
 
 set terminal pdf size 10cm,6cm enhanced font 'Monospace,8' linewidth 1 rounded dashed
-set output 'cpu.pdf'
+set output outputfilename
 
 set xlabel "time [s]"
 set ylabel "cpu load [%]"
@@ -31,11 +31,11 @@ do for [i=1:words(files)] {
 set xtics nomirror
 set grid xtics
 #set xtics 0,1000,3000
-#set xrange [0:100]
+set xrange [-1:]
 set ytics nomirror
 set grid ytics
-#set ytics 0,stepsizey,250
-#set yrange [-0.1:0.5]
+set ytics 0,20,120
+set yrange [-10:120]
 
 
 myfont = "Monospace,10"
@@ -54,7 +54,7 @@ pointtype word(symbols,i) lc rgb "black" font myfont
 # pause -1
 
 #command line to call
-#gnuplot -e "column=10; files='/scripts/cpu_8.txt /scripts/cpu_36.txt';labels='aaa bbb';symbols='▽ ▲'" plotcpu.plt 
+#gnuplot -e "column=10; files='/data/cpu_8.txt /data/cpu_36.txt';labels='aaa bbb';symbols='▽ ▲'; outputfilename='out.pdf'" plotcpu.plt 
 
 #symbols
 #+ ▽ ▲ ◆ ●
