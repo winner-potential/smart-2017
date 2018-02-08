@@ -2,7 +2,7 @@
 
 PROJECT=${PWD##*/}
 PROJECT=$(echo $PROJECT | tr '[:upper:]' '[:lower:]') # fix lower case
-TARGET=$(date +"%s")
+TARGET="$(date +"%s")-$1"
 
 mkdir -p data/$TARGET
 

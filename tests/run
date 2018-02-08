@@ -1,8 +1,8 @@
 #!/bin/bash
 
-export DELAY=30 #time in s before test
-export DURATION=30 #time in s running the test
-export WAIT_FOR_TERMINATION=90 #delay + duration * 2
+export DELAY=60 #time in s before test
+export DURATION=900 #time in s running the test
+export WAIT_FOR_TERMINATION=1800 #delay + duration * 2
 export SENDER="$1"
 export TESTMASCHINE="$2"
 
@@ -13,7 +13,7 @@ function run {
     docker-compose -f $1 up -d --build
     sleep $WAIT_FOR_TERMINATION
     docker-compose -f $1 stop
-    ../getdata
+    ../getdata "$1-$2"
     docker-compose -f $1 down -v
     # Full cleanup, if -v is not enough
     # docker stop $(docker container list -a -q)
@@ -23,9 +23,21 @@ function run {
 }
 
 # List tests
-run nifi.yml 10
-run nodered.yml 10
-run camel.yml 10
+run nifi.yml 50
+run nodered.yml 50
+run camel.yml 50
+
+run nifi.yml 100
+run nodered.yml 100
+run camel.yml 100
+
+run nifi.yml 200
+run nodered.yml 200
+run camel.yml 200
+
+run nifi.yml 400
+run nodered.yml 400
+run camel.yml 400
 
 #run nodered.yml 50
 #run nodered.yml 100
