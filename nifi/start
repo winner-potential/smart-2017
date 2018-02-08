@@ -1,6 +1,6 @@
 #!/bin/bash
 
-./cpu "java" &
-./mem "NiFi" &
+$NIFI_HOME/bin/cpu "java" &
+$NIFI_HOME/bin/mem "NiFi" &
 
 $NIFI_HOME/bin/nifi.sh run
