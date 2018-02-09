@@ -29,13 +29,13 @@ do for [i=1:words(files)] {
 }
 
 set xtics nomirror
-set grid xtics
+#set grid xtics
 #set xtics 0,1000,3000
 set xrange [-1:]
 set ytics nomirror
 set grid ytics
-set ytics 0,20,120
-set yrange [-10:120]
+#set ytics 0,20,120
+set yrange [-10:]
 
 
 myfont = "Monospace,10"
@@ -52,10 +52,4 @@ title word(labels,i) with linespoints \
 pointtype word(symbols,i) lc rgb "black" font myfont
 
 # pause -1
-
-#command line to call
-#gnuplot -e "column=10; files='/data/cpu_8.txt /data/cpu_36.txt';labels='aaa bbb';symbols='▽ ▲'; outputfilename='out.pdf'" plotcpu.plt 
-
-#symbols
-#+ ▽ ▲ ◆ ●
 

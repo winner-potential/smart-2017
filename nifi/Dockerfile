@@ -55,6 +55,9 @@ VOLUME ["/measurements"]
 #Copy the matching configuration from the local repository
 COPY nifi.properties /opt/nifi/nifi-1.4.0/conf/nifi.properties
 RUN chown nifi:nifi /opt/nifi/nifi-1.4.0/conf/nifi.properties
+COPY bootstrap.conf /opt/nifi/nifi-1.4.0/conf/bootstrap.conf
+RUN chown nifi:nifi /opt/nifi/nifi-1.4.0/conf/bootstrap.conf
+
 
 COPY processors/nars/* /opt/nifi/nifi-1.4.0/lib/
 RUN chown nifi:nifi /opt/nifi/nifi-1.4.0/lib/nifi-customProcessor-nar-1.0.nar
