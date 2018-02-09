@@ -10,5 +10,6 @@ do
     symbols="$symbols${syms[counter]} "
     counter=$counter+1
 done
-gnuplot -e "column=10; files='$1';labels='$2';symbols='$symbols'; outputfilename='/data/cpu_$3.pdf'" /scripts/plotcpu.plt 
-#gnuplot -e "column=10; files='$1';labels='$2';symbols='$symbols'; outputfilename='/data/mem_$3.pdf'" /scripts/plotram.plt 
+#gnuplot -e "column=10; files='$1';labels='$2';symbols='$symbols'; outputfilename='/data/cpu_$3.pdf'" /scripts/plotcpu.plt 
+#gnuplot -e "column=10; files='$1';labels='$2';symbols='$symbols'; outputfilename='/data/mem_$3.pdf'" /scripts/plotram.plt
+gnuplot -e "files='$1';symbols='$symbols'; outputfilename='/data/timediffs_$2.pdf'" scripts/plottimedifferences.plt
