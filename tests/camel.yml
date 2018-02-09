@@ -19,6 +19,7 @@ services:
       MEASUREMENT_DELAY: ${DELAY}
       WILDFLY_MANAGEMENT_USER: admin
       WILDFLY_MANAGEMENT_PASSWORD: admin
+      JVM_OPTS: "-Xmx12g -Xms12g -XX:MaxPermSize=1024m"
     extra_hosts:
       - "camelreceiver:${SENDER}"
   starter:
