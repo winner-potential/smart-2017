@@ -4,12 +4,16 @@ array=$(echo $IN | tr " " "\n")
 sym="▽ ▲ ◆ ● +"
 syms=$(echo $sym | tr " " "\n")
 symbols=""
+filelist=""
+xtemp=""
 counter=0
 for x in $array
 do
     symbols="$symbols${syms[counter]} "
     counter=$counter+1
+    sort -t" " -k$3 $x > "${x}_sorted"
+    filelist="$filelist${x}_sorted "
 done
 #gnuplot -e "column=10; files='$1';labels='$2';symbols='$symbols'; outputfilename='/data/cpu_$3.pdf'" /scripts/plotcpu.plt 
 #gnuplot -e "column=10; files='$1';labels='$2';symbols='$symbols'; outputfilename='/data/mem_$3.pdf'" /scripts/plotram.plt
-gnuplot -e "files='$1';symbols='$symbols'; outputfilename='/data/timediffs_$2.pdf'" scripts/plottimedifferences.plt
+gnuplot -e "files='$filelist';symbols='$symbols'; outputfilename='/data/timediffs_$2.pdf'" scripts/plottimedifferences.plt

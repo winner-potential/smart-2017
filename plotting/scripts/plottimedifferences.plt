@@ -14,7 +14,7 @@ set key box linetype 1 linecolor '#000000' linewidth 2
 set key width +1
 set key spacing 1.5
 
-set terminal pdf size 10cm,6cm enhanced font 'Monospace,8' linewidth 1 rounded dashed
+set terminal pdf size 20cm,6cm enhanced font 'Monospace,8' linewidth 1 rounded dashed
 set output outputfilename
 
 set xlabel "time [ms]"
@@ -31,7 +31,7 @@ do for [i=1:words(files)] {
 set xtics nomirror
 #set grid xtics
 #set xtics 0,1000,3000
-set xrange [-1:]
+set xrange [-1:2000]
 set ytics nomirror
 set grid ytics
 #set ytics 0,20,120
