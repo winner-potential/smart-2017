@@ -30,13 +30,16 @@ do for [i=1:words(files)] {
 
 set xtics nomirror
 #set grid xtics
-#set xtics 0,1000,3000
-set xrange [-1:]
+if ((upperx < 0 || upperx >= 0) && (lowerx < 0 || lowerx >= 0)){
+        set xrange [lowerx:upperx]
+}else{
+    set xrange [-1:*]
+}
+#set xtics 0,200
 set ytics nomirror
 set grid ytics
 #set ytics 0,20,120
 set yrange [-10:]
-
 
 myfont = "Monospace,10"
 
@@ -50,6 +53,3 @@ plot for [i=1:words(labels)] word(files, i) \
 using ($1*factorx-(word(xoffsets,i)+0)):column \
 title word(labels,i) with linespoints \
 pointtype word(symbols,i) lc rgb "black" font myfont
-
-# pause -1
-
