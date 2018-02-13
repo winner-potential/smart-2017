@@ -56,6 +56,6 @@ then
                 symbols='$symbols'; \
                 outputfilename='$1/cpu_400_plot.pdf'; \
                 middling='20'; \
-                parts='10 800 1800'" \
+                parts='30 900 1800'" \
                 /scripts/plotcpu_large.plt
 fi

@@ -1,7 +1,24 @@
 reset
 
-counter = 0
 
+check=5
+a1 = 0
+c1 = 0
+a2 = 0
+c2 = 0
+a3 = 0
+c3 = 0
+a4 = 0
+c4 = 0
+a5 = 0
+c5 = 0
+getAmount(n) = (ret = NaN, ret=(n==1) ? a1 : ret,ret=(n==2) ? a2 : ret,ret=(n==3) ? a3 : ret,ret=(n==4) ? a4 : ret,ret=(n==5) ? a5 : ret,ret)
+getCount(n) = (ret = NaN, ret=(n==1) ? c1 : ret,ret=(n==2) ? c2 : ret,ret=(n==3) ? c3 : ret,ret=(n==4) ? c4 : ret,ret=(n==5) ? c5 : ret,ret)
+setAmount(n,x) = (a1=(n==1) ? x : a1,a2=(n==2) ? x : a2,a3=(n==3) ? x : a3,a4=(n==4) ? x : a4,a5=(n==5) ? x : a5)
+setCount(n,x) = (c1=(n==1) ? x : c1,c2=(n==2) ? x : c2,c3=(n==3) ? x : c3,c4=(n==4) ? x : c4,c5=(n==5) ? x : c5)
+recmean(x,i) = (amount=getAmount(i),count=getCount(i),ret = NaN, amount=amount+x, count = count + 1, ret=(count==check) ? amount/count : ret, amount=(count==check) ? 0 : amount, count=(count==check) ? 0:count, amount=setAmount(i,amount),count=setCount(i,count),ret)
+
+counter = 0
 min(a,b) = a >= b ? b : a
 samples(n) = min(int($0), n)
 avg_data = ""
