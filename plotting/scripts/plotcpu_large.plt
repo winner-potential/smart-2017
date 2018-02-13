@@ -1,6 +1,7 @@
 reset
 
-
+middlingcommand="<awk 'BEGIN{}(NR<1){sum=0}{sum=sum+%s}(NR%%%s==0){print $1,sum/%s;sum=0}END{}' %s"
+#sprintf(command,"$2","10","10.0","testdata.txt") using 1:2 with linespoints
 check=5
 a1 = 0
 c1 = 0
