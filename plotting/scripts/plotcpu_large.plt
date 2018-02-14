@@ -2,7 +2,8 @@ reset
 
 middlingcommand="<awk 'BEGIN{}(NR<1){sum=0}{sum=sum+%s}(NR%%%s==0){print $1,sum/%s;sum=0}END{}' %s"
 #sprintf(command,"$2","10","10.0","testdata.txt") using 1:2 with linespoints
-check=5
+
+check=middling
 a1 = 0
 c1 = 0
 a2 = 0
@@ -28,7 +29,7 @@ sum_n(data, n) = ( n <= 0 ? 0 : word(data, words(data) - n) + sum_n(data, n - 1)
 #counter= (counter==middling) ? 0 : counter+1, 
 avg(x, n) = (avg_data = sprintf("%s %f", (int($0)==0)?"":avg_data, x), sum_n(avg_data, samples(n))/samples(n)) 
 
-set datafile missing "NaN"
+#set datafile missing "NaN"
 factorx = 1
 factory = 1
 #stepsizex = 100
@@ -73,8 +74,8 @@ if (words(parts)>0){
         unset xlabel
         unset ylabel
         set xrange [word(parts,j-1):word(parts,j)]
-        plot for [i=1:words(labels)] word(files, i) every middling \
-        using ($1*factorx-(word(xoffsets,i)+0)):(avg(column(column),middling)) \
+        plot for [i=1:words(labels)] word(files, i) \
+        using ($1*factorx-(word(xoffsets,i)+0)):(recmean(column(column),j)) \
         title word(labels,i) with linespoints \
         pointtype word(symbols,i) lc rgb "black" font myfont tc rgb "black"
     }
