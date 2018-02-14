@@ -78,24 +78,26 @@ symbols="▲ ▽ ◆ ● + x"
                 #~ parts='900 1800'" \
                 #~ /scripts/plotmem_large.plt
 #~ fi
-toolparam="node"
 respparam=400
-respfiles=""
-resplabels=""
-for f in $(find $1/responses/* -name "*$toolparam*-$respparam" ! -name "*.pdf" -type f | sort)
+for toolparam in "node" "nifi" "camel"
 do
-    respfiles="$respfiles${f} "
-    resplabels="$resplabels$(echo $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g") "
+    respfiles=""
+    resplabels=""
+    for f in $(find $1/responses/* -name "*$toolparam*-$respparam" ! -name "*.pdf" -type f | sort)
+    do
+        respfiles="$respfiles${f} "
+        resplabels="$resplabels$(echo $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g") "
+    done
+    echo $respfiles
+    if [[ $respfiles != "" ]]
+    then
+        gnuplot -e "column=10; \
+                    files='$respfiles'; \
+                    labels='$resplabels'; \
+                    symbols='$symbols'; \
+                    outputfilename='$1/response_"$respparam$toolparam"_plot.pdf'; \
+                    middling='20'; \
+                    parts='900 1800'" \
+                    /scripts/plottimedifferences.plt
+    fi
 done
-echo $respfiles
-if [[ $respfiles != "" ]]
-then
-    gnuplot -e "column=10; \
-                files='$respfiles'; \
-                labels='$resplabels'; \
-                symbols='$symbols'; \
-                outputfilename='$1/response_"$respparam$toolparam"_plot.pdf'; \
-                middling='20'; \
-                parts='900 1800'" \
-                /scripts/plottimedifferences.plt
-fi
