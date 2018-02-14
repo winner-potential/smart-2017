@@ -74,8 +74,8 @@ if (words(parts)>0){
         unset xlabel
         unset ylabel
         set xrange [word(parts,j-1):word(parts,j)]
-        plot for [i=1:words(labels)] word(files, i) \
-        using ($1*factorx-(word(xoffsets,i)+0)):(recmean(column(column),j)) \
+        plot for [i=1:words(labels)] sprintf(middlingcommand,"$".column,middling,middling,word(files, i)) \
+        using ($1*factorx-(word(xoffsets,i)+0)):2 \
         title word(labels,i) with linespoints \
         pointtype word(symbols,i) lc rgb "black" font myfont tc rgb "black"
     }

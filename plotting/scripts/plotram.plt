@@ -47,6 +47,6 @@ myfont = "Monospace,10"
 #set arrow 3 from 2470,0 to 2470,250 lc rgb "black" nohead
 
 plot for [i=1:words(labels)] word(files, i) \
-using ($1*factorx-(word(xoffsets,i)+0)):($2+$3+$4+$5+$6+$7+$8+$9+$10+$11+$12+$13+$14+$15+$16+$17) \
+using ($1*factorx-(word(xoffsets,i)+0)):($4+$5+$7+$9+$11+$13) \
 title word(labels,i) with linespoints \
 pointtype word(symbols,i) lc rgb "black" font myfont

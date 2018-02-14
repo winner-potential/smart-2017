@@ -33,7 +33,7 @@ QString getNaN(double d)
     }
     else
     {
-        return "NaN";
+        return "-10";
     }
 }
 
@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
         QJsonObject object;
         QString line("");
         long errorcounter = 0;
+        qInfo() << "Process has started";
         if(outgoing.open(QIODevice::ReadOnly))
         {
             QTextStream in(&outgoing);

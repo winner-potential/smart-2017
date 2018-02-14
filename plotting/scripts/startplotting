@@ -1,61 +1,101 @@
 #!/bin/bash
 #~ gnuplot -e "files='$1';symbols='$symbols'; outputfilename='/data/timediffs_$2.pdf'" scripts/plottimedifferences.plt
-symbols="▲ ▽ ◆ ● + "
-for d in $(find $1 -type d)
+symbols="▲ ▽ ◆ ● + x"
+#~ for d in $(find $1 -type d)
+#~ do
+    #~ # nifi directory for memory and cpu
+    #~ if [[ $d == *"tests_"* ]]
+    #~ then
+        #~ cpufiles=""
+        #~ cpulabels=""
+        #~ for f in $(find $d -name "cpu*" ! -name "*.pdf" | sort)
+        #~ do
+            #~ cpufiles="$cpufiles${f} "
+            #~ cpulabels="$cpulabels$(echo $(basename "${f}" ".txt") | sed -e "s/_//g") "
+        #~ done
+        #~ if [[ $cpufiles != "" ]]
+        #~ then
+            #~ gnuplot -e "column=10; \
+                        #~ files='$cpufiles'; \
+                        #~ labels='$cpulabels'; \
+                        #~ symbols='$symbols'; \
+                        #~ outputfilename='$d/cpu_plot.pdf'; \
+                        #~ lowerx='NaN'; \
+                        #~ upperx='NaN'" \
+                        #~ /scripts/plotcpu.plt
+        #~ fi
+        #~ memfiles=""
+        #~ memlabels=""
+        #~ for f in $(find $d -name "mem*" ! -name "*.pdf" ! -name "memory*" | sort)
+        #~ do
+            #~ memfiles="$memfiles${f} "
+            #~ memlabels="$memlabels$(echo $(basename "${f}" ".txt") | sed -e "s/_//g") "
+        #~ done
+        #~ if [[ $memfiles != "" ]]
+        #~ then
+            #~ gnuplot -e "files='$memfiles'; \
+                        #~ labels='$memlabels'; \
+                        #~ symbols='$symbols'; \
+                        #~ outputfilename='$d/mem_plot.pdf'" \
+                        #~ /scripts/plotram.plt
+        #~ fi
+    #~ fi
+#~ done
+#~ collectparam="100"
+#~ cpufiles=""
+#~ cpulabels=""
+#~ for f in $(find $1/*$collectparam* -name "cpu*" ! -name "*.pdf" -type f | sort)
+#~ do
+    #~ cpufiles="$cpufiles${f} "
+    #~ cpulabels="$cpulabels$(echo $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g") "
+#~ done
+#~ if [[ $cpufiles != "" ]]
+#~ then
+    #~ gnuplot -e "column=10; \
+                #~ files='$cpufiles'; \
+                #~ labels='$cpulabels'; \
+                #~ symbols='$symbols'; \
+                #~ outputfilename='$1/cpu_"$collectparam"_plot.pdf'; \
+                #~ middling='20'; \
+                #~ parts='30 900 1800'" \
+                #~ /scripts/plotcpu_large.plt
+#~ fi
+#~ memfiles=""
+#~ memlabels=""
+#~ for f in $(find $1/*$collectparam* -name "mem*" ! -name "*.pdf" -type f | sort)
+#~ do
+    #~ memfiles="$memfiles${f} "
+    #~ memlabels="$memlabels$(echo $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g") "
+#~ done
+#~ if [[ $memfiles != "" ]]
+#~ then
+    #~ gnuplot -e "column=10; \
+                #~ files='$memfiles'; \
+                #~ labels='$memlabels'; \
+                #~ symbols='$symbols'; \
+                #~ outputfilename='$1/mem_"$collectparam"_plot.pdf'; \
+                #~ middling='20'; \
+                #~ parts='900 1800'" \
+                #~ /scripts/plotmem_large.plt
+#~ fi
+toolparam="node"
+respparam=400
+respfiles=""
+resplabels=""
+for f in $(find $1/responses/* -name "*$toolparam*-$respparam" ! -name "*.pdf" -type f | sort)
 do
-    # nifi directory for memory and cpu
-    if [[ $d == *"tests_"* ]]
-    then
-        cpufiles=""
-        cpulabels=""
-        for f in $(find $d -name "cpu*" ! -name "*.pdf" | sort)
-        do
-            cpufiles="$cpufiles${f} "
-            cpulabels="$cpulabels$(echo $(basename "${f}" ".txt") | sed -e "s/_//g") "
-        done
-        if [[ $cpufiles != "" ]]
-        then
-            gnuplot -e "column=10; \
-                        files='$cpufiles'; \
-                        labels='$cpulabels'; \
-                        symbols='$symbols'; \
-                        outputfilename='$d/cpu_plot.pdf'; \
-                        lowerx='NaN'; \
-                        upperx='NaN'" \
-                        /scripts/plotcpu.plt
-        fi
-        memfiles=""
-        memlabels=""
-        for f in $(find $d -name "mem*" ! -name "*.pdf" ! -name "memory*" | sort)
-        do
-            memfiles="$memfiles${f} "
-            memlabels="$memlabels$(echo $(basename "${f}" ".txt") | sed -e "s/_//g") "
-        done
-        if [[ $memfiles != "" ]]
-        then
-            gnuplot -e "files='$memfiles'; \
-                        labels='$memlabels'; \
-                        symbols='$symbols'; \
-                        outputfilename='$d/mem_plot.pdf'" \
-                        /scripts/plotram.plt
-        fi
-    fi
+    respfiles="$respfiles${f} "
+    resplabels="$resplabels$(echo $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g") "
 done
-cpufiles=""
-cpulabels=""
-for f in $(find $1/*400* -name "cpu*" ! -name "*.pdf" -type f | sort)
-do
-    cpufiles="$cpufiles${f} "
-    cpulabels="$cpulabels$(echo $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g") "
-done
-if [[ $cpufiles != "" ]]
+echo $respfiles
+if [[ $respfiles != "" ]]
 then
     gnuplot -e "column=10; \
-                files='$cpufiles'; \
-                labels='$cpulabels'; \
+                files='$respfiles'; \
+                labels='$resplabels'; \
                 symbols='$symbols'; \
-                outputfilename='$1/cpu_400_plot.pdf'; \
+                outputfilename='$1/response_"$respparam$toolparam"_plot.pdf'; \
                 middling='20'; \
-                parts='30 900 1800'" \
-                /scripts/plotcpu_large.plt
+                parts='900 1800'" \
+                /scripts/plottimedifferences.plt
 fi
