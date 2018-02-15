@@ -78,7 +78,7 @@ symbols="▲ ▽ ◆ ● + x"
                 #~ parts='900 1800'" \
                 #~ /scripts/plotmem_large.plt
 #~ fi
-respparam=400
+respparam=100
 for toolparam in "node" "nifi" "camel"
 do
     respfiles=""
