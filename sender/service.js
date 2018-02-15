@@ -20,16 +20,25 @@ var start = function(installation, endpoint, replication) {
     setTimeout(function() {
       var id = installation + "-" + nr + "-" + new Date().getTime();
       console.log(JSON.stringify({"time": new Date().getTime(), "id": id}));
-      var req = http.request(options, function(){});
+      var req = http.request(options, (res) => {
+          console.log('STATUS: '+res.statusCode + " " + id);
+          res.setEncoding('utf8');
+          res.on('data', (chunk) => {
+            //~ console.log(`BODY: ${chunk}`);
+          });
+          res.on('end', () => {
+            //~ console.log('No more data in response.');
+          });
+        });
+      req.on('error', function(err) {
+        console.log(JSON.stringify({"time": new Date().getTime(), "error": err, "id": id}));
+      });
       req.write(JSON.stringify({
         "time": time.getTime(),
         "station": installation,
         "id": id,
         "energy": E
       }));
-      req.on('error', function(err) {
-        console.log(JSON.stringify({"time": new Date().getTime(), "error": err, "id": id}));
-      });
       req.end();
     }, 1000/replication * nr);
   };
