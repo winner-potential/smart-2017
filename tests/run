@@ -12,9 +12,9 @@ function run {
     export AMOUNT=$2
     docker-compose -f $1 up -d --build
     sleep $WAIT_FOR_TERMINATION
-    #docker-compose -f $1 stop
-    #../getdata "$1-$2"
-    #docker-compose -f $1 down -v
+    docker-compose -f $1 stop
+    ../getdata "$1-$2"
+    docker-compose -f $1 down -v
     # Full cleanup, if -v is not enough
     # docker stop $(docker container list -a -q)
     # docker rm $(docker container list -a -q)
@@ -36,8 +36,12 @@ function run {
 #run camel.yml 200
 
 run nifi.yml 400
-#run nodered.yml 400
-#run camel.yml 400
+run nodered.yml 400
+run camel.yml 400
+
+run nifi.yml 500
+run nodered.yml 500
+run camel.yml 500
 
 #run nodered.yml 50
 #run nodered.yml 100
