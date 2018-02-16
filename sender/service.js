@@ -21,8 +21,10 @@ var start = function(installation, endpoint, replication) {
       var id = installation + "-" + nr + "-" + new Date().getTime();
       console.log(JSON.stringify({"time": new Date().getTime(), "id": id}));
       var req = http.request(options, (res) => {
-          console.log('STATUS: '+res.statusCode + " " + id);
           res.setEncoding('utf8');
+          if(res.statusCode != 200 && res.statusCode != 204) {
+              console.log(JSON.stringify({"time": new Date().getTime(), "error": "Bad status code " + res.statusCode, "id": id}));
+          }
           res.on('data', (chunk) => {
             //~ console.log(`BODY: ${chunk}`);
           });
