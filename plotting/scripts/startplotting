@@ -1,14 +1,48 @@
 #!/bin/bash
 #~ gnuplot -e "files='$1';symbols='$symbols'; outputfilename='/data/timediffs_$2.pdf'" scripts/plottimedifferences.plt
-symbols="▲ ▽ ◆ ● + x"
+
+getLabel()
+{
+    if [[ $1 = *"nifi"* ]]; then
+        echo "ApacheNifi"
+    fi
+    if [[ $1 = *"camel"* ]]; then
+        echo "ApacheCamel"
+    fi
+    if [[ $1 = *"node"* ]]; then
+        echo "NodeRED"
+    fi
+}
+
+symbols="▲ ◆ ● x + ▽ "
+for d in $(find $1 -type d)
+do
+    if [[ $d == *"tests_nifitest"* ]]
+    then
+        cpufiles=""
+        for f in $(find $d -name "cpu_*" ! -name "*.pdf" | sort)
+        do
+            cpufiles="$cpufiles${f} "
+        done
+        join -1 1 -2 1 $cpufiles | awk '{print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10+$22,$11,$12,$13}' > $d/cpu.txt
+        
+        memfiles=""
+        for f in $(find $d -name "mem_*" ! -name "*.pdf" | sort)
+        do
+            memfiles="$memfiles${f} "
+        done
+        join -1 1 -2 1 $memfiles | awk '{print $1,$2+$19,$3+$20,$4+$21,$5+$22,$6+$23,$7+$24,$8+$25,$9+$26,$10+$27,$11+$28,$12+$29,$13+$30,$14+$31,$15+$32,$16+$33,$17+$34,$18+$35}' > $d/mem.txt
+    fi
+done
+echo "Created Nifi files"
+
 #~ for d in $(find $1 -type d)
 #~ do
-    #~ # nifi directory for memory and cpu
     #~ if [[ $d == *"tests_"* ]]
     #~ then
         #~ cpufiles=""
         #~ cpulabels=""
-        #~ for f in $(find $d -name "cpu*" ! -name "*.pdf" | sort)
+        #~ for f in $(find $d -name "cpu.*" ! -name "*.pdf" | sort)
         #~ do
             #~ cpufiles="$cpufiles${f} "
             #~ cpulabels="$cpulabels$(echo $(basename "${f}" ".txt") | sed -e "s/_//g") "
@@ -41,63 +75,76 @@ symbols="▲ ▽ ◆ ● + x"
         #~ fi
     #~ fi
 #~ done
-#~ collectparam="100"
-#~ cpufiles=""
-#~ cpulabels=""
-#~ for f in $(find $1/*$collectparam* -name "cpu*" ! -name "*.pdf" -type f | sort)
-#~ do
-    #~ cpufiles="$cpufiles${f} "
-    #~ cpulabels="$cpulabels$(echo $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g") "
-#~ done
-#~ if [[ $cpufiles != "" ]]
-#~ then
-    #~ gnuplot -e "column=10; \
-                #~ files='$cpufiles'; \
-                #~ labels='$cpulabels'; \
-                #~ symbols='$symbols'; \
-                #~ outputfilename='$1/cpu_"$collectparam"_plot.pdf'; \
-                #~ middling='20'; \
-                #~ parts='30 900 1800'" \
-                #~ /scripts/plotcpu_large.plt
-#~ fi
-#~ memfiles=""
-#~ memlabels=""
-#~ for f in $(find $1/*$collectparam* -name "mem*" ! -name "*.pdf" -type f | sort)
-#~ do
-    #~ memfiles="$memfiles${f} "
-    #~ memlabels="$memlabels$(echo $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g") "
-#~ done
-#~ if [[ $memfiles != "" ]]
-#~ then
-    #~ gnuplot -e "column=10; \
-                #~ files='$memfiles'; \
-                #~ labels='$memlabels'; \
-                #~ symbols='$symbols'; \
-                #~ outputfilename='$1/mem_"$collectparam"_plot.pdf'; \
-                #~ middling='20'; \
-                #~ parts='900 1800'" \
-                #~ /scripts/plotmem_large.plt
-#~ fi
-respparam=100
-for toolparam in "node" "nifi" "camel"
+
+
+for collectparam in "400" "500"
 do
-    respfiles=""
-    resplabels=""
-    for f in $(find $1/responses/* -name "*$toolparam*-$respparam" ! -name "*.pdf" -type f | sort)
+    cpufiles=""
+    cpulabels=""
+    for f in $(find $1/*$collectparam* -name "cpu.*" ! -name "*.pdf" -type f | sort)
     do
-        respfiles="$respfiles${f} "
-        resplabels="$resplabels$(echo $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g") "
+        cpufiles="$cpufiles${f} "
+        cpulabels="$cpulabels$(getLabel $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g") "
     done
-    echo $respfiles
-    if [[ $respfiles != "" ]]
+    if [[ $cpufiles != "" ]]
     then
         gnuplot -e "column=10; \
-                    files='$respfiles'; \
-                    labels='$resplabels'; \
+                    files='$cpufiles'; \
+                    labels='$cpulabels'; \
                     symbols='$symbols'; \
-                    outputfilename='$1/response_"$respparam$toolparam"_plot.pdf'; \
-                    middling='20'; \
-                    parts='900 1800'" \
-                    /scripts/plottimedifferences.plt
+                    outputfilename='$1/cpu_"$collectparam"_plot.pdf'; \
+                    middling='50.0'; \
+                    parts='1800'; \
+                    setstuff=0" \
+                    /scripts/plotcpu_large.plt
+    fi
+    memfiles=""
+    memlabels=""
+    for f in $(find $1/*$collectparam* -name "memory*" -o -name "mem.*" ! -name "*.pdf" -type f | sort)
+    do
+        memfiles="$memfiles${f} "
+        memlabels="$memlabels$(getLabel $(echo $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g")) "
+    done
+    echo $memfiles
+    if [[ $memfiles != "" ]]
+    then
+        gnuplot -e "column=10; \
+                    files='$memfiles'; \
+                    labels='$memlabels'; \
+                    symbols='$symbols'; \
+                    outputfilename='$1/mem_"$collectparam"_plot.pdf'; \
+                    middling='50.0'; \
+                    parts='1000000 6000000 0 300000 '; \
+                    xlow=0;xhigh=1300" \
+                    /scripts/plotmem_large.plt
     fi
 done
+#~ respparam=100
+#~ for toolparam in "node" "nifi" "camel"
+#~ do
+    #~ respfiles=""
+    #~ resplabels=""
+    #~ for f in $(find $1/responses/* -name "*$toolparam*-$respparam" ! -name "*.pdf" -type f | sort)
+    #~ do
+        #~ respfiles="$respfiles${f} "
+        #~ resplabels="$resplabels$(echo $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g") "
+    #~ done
+    #~ echo $respfiles
+    #~ if [[ $respfiles != "" ]]
+    #~ then
+        #~ gnuplot -e "column=10; \
+                    #~ files='$respfiles'; \
+                    #~ labels='$resplabels'; \
+                    #~ symbols='$symbols'; \
+                    #~ outputfilename='$1/response_"$respparam$toolparam"_plot.pdf'; \
+                    #~ middling='20'; \
+                    #~ parts='900 1800'" \
+                    #~ /scripts/plottimedifferences.plt
+    #~ fi
+#~ done
+
+for f in $(find $1 -name "logs_*" ! -name "*.pdf" | sort)
+do
+    echo "$f $(awk 'BEGIN{count1=0;avg1=0;count2=0;avg2=0}{if($3-$2>0){count1=count1+1;avg1=avg1+($3-$2)}}{if($4-$2>0){count2=count2+1;avg2=avg2+($4-$2)}}END{print "DB:",avg1/count1,"AVG:",avg2/count2,count1,count2}' $f)"
+done
+

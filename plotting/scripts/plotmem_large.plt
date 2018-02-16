@@ -53,19 +53,34 @@ do for [i=1:words(files)] {
 set xtics nomirror
 set ytics nomirror
 set grid ytics
+set format y "%1.0t{/Symbol \327}10^{%L}"
+set xrange[xlow:xhigh]
+set xtics 300
+set grid xtics
 
 if (words(parts)>0){
-    set multiplot layout words(parts), 1
-    set xrange [*:word(parts,1)]
-    plot for [i=1:words(labels)] sprintf(wellform,word(files, i))." | ".sprintf(middlingcommand,"20","20.0") \
+    set multiplot layout words(parts)/2,1 margins 0.1,0.98,0.1,0.98 spacing 0.00,0.05 
+    unset border
+    set border 2
+    set xtics scale 0
+    set format x ""
+    set yrange [word(parts,1):word(parts,2)]
+    set ytics 1000000
+    plot for [i=1:words(labels)] sprintf(wellform,word(files, i))." | ".sprintf(middlingcommand,middling,middling) \
     using ($1*factorx-(word(xoffsets,i)+0)):($2) \
     title word(labels,i) with linespoints \
     pointtype word(symbols,i) lc rgb "black" font myfont
     
-    do for [j=2:words(parts)] {
+    do for [j=3:words(parts):2] {
         unset key
-        set xrange [word(parts,j-1):word(parts,j)]
-        plot for [i=1:words(labels)] sprintf(wellform,word(files, i))." | ".sprintf(middlingcommand,"20","20.0")\
+        unset border
+        set border 3
+        set format x "%1.0f"
+        set xtics nomirror
+        set ytics nomirror
+        set yrange [word(parts,j):word(parts,j+1)]
+        set ytics 50000
+        plot for [i=1:words(labels)] sprintf(wellform,word(files, i))." | ".sprintf(middlingcommand,middling,middling)\
         using ($1*factorx-(word(xoffsets,i)+0)):2 \
         title word(labels,i) with linespoints \
         pointtype word(symbols,i) lc rgb "black" font myfont tc rgb "black"
