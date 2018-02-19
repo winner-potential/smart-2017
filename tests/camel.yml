@@ -1,17 +1,13 @@
 version: "2"
 
 services:
-  cameldeploy:
-    build:
-      context: ../maven
-    depends_on:
-      - cameltest
   cameltest:
     build:
       context: ../camel
     restart: unless-stopped
     volumes:
-      - cameltest:/measurements:rw
+      - "cameltest:/measurements:rw"
+      - "../maven/datalab-example.war:/opt/jboss/wildfly/standalone/deployments/datalab-example.war:rw"
     ports:
       - "9990:9990"
       - "8080:8080"
