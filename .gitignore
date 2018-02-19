@@ -3,3 +3,16 @@ volumes
 data
 wso2/jdk-7u80
 wso2/wso2cep-4.2.0
+nifi/.classpath
+nifi/.project
+nifi/processors/customProcessor/.settings
+nifi/processors/customProcessor/.project
+nifi/processors/customProcessor/target
+nifi/processors/customProcessor/nifi-customProcessor-nar
+nifi/processors/customProcessor/nifi-customProcessor-processors/target
+nifi/processors/customProcessor/nifi-customProcessor-processors/.settings
+nifi/processors/customProcessor/nifi-customProcessor-processors/.classpath
+nifi/processors/customProcessor/nifi-customProcessor-processors/.gitignore
+nifi/processors/customProcessor/nifi-customProcessor-processors/.project
+nifi/processors/customProcessor/nifi-customProcessor-processors/target
+nifi/flows/archive

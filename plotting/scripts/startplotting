@@ -77,48 +77,48 @@ echo "Created Nifi files"
 #~ done
 
 
-for collectparam in "400" "500"
-do
-    cpufiles=""
-    cpulabels=""
-    for f in $(find $1/*$collectparam* -name "cpu.*" ! -name "*.pdf" -type f | sort)
-    do
-        cpufiles="$cpufiles${f} "
-        cpulabels="$cpulabels$(getLabel $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g") "
-    done
-    if [[ $cpufiles != "" ]]
-    then
-        gnuplot -e "column=10; \
-                    files='$cpufiles'; \
-                    labels='$cpulabels'; \
-                    symbols='$symbols'; \
-                    outputfilename='$1/cpu_"$collectparam"_plot.pdf'; \
-                    middling='50.0'; \
-                    parts='1800'; \
-                    setstuff=0" \
-                    /scripts/plotcpu_large.plt
-    fi
-    memfiles=""
-    memlabels=""
-    for f in $(find $1/*$collectparam* -name "memory*" -o -name "mem.*" ! -name "*.pdf" -type f | sort)
-    do
-        memfiles="$memfiles${f} "
-        memlabels="$memlabels$(getLabel $(echo $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g")) "
-    done
-    echo $memfiles
-    if [[ $memfiles != "" ]]
-    then
-        gnuplot -e "column=10; \
-                    files='$memfiles'; \
-                    labels='$memlabels'; \
-                    symbols='$symbols'; \
-                    outputfilename='$1/mem_"$collectparam"_plot.pdf'; \
-                    middling='50.0'; \
-                    parts='1000000 6000000 0 300000 '; \
-                    xlow=0;xhigh=1300" \
-                    /scripts/plotmem_large.plt
-    fi
-done
+#~ for collectparam in "400" "500"
+#~ do
+    #~ cpufiles=""
+    #~ cpulabels=""
+    #~ for f in $(find $1/*$collectparam* -name "cpu.*" ! -name "*.pdf" -type f | sort)
+    #~ do
+        #~ cpufiles="$cpufiles${f} "
+        #~ cpulabels="$cpulabels$(getLabel $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g") "
+    #~ done
+    #~ if [[ $cpufiles != "" ]]
+    #~ then
+        #~ gnuplot -e "column=10; \
+                    #~ files='$cpufiles'; \
+                    #~ labels='$cpulabels'; \
+                    #~ symbols='$symbols'; \
+                    #~ outputfilename='$1/cpu_"$collectparam"_plot.pdf'; \
+                    #~ middling='50.0'; \
+                    #~ parts='1800'; \
+                    #~ setstuff=0" \
+                    #~ /scripts/plotcpu_large.plt
+    #~ fi
+    #~ memfiles=""
+    #~ memlabels=""
+    #~ for f in $(find $1/*$collectparam* -name "memory*" -o -name "mem.*" ! -name "*.pdf" -type f | sort)
+    #~ do
+        #~ memfiles="$memfiles${f} "
+        #~ memlabels="$memlabels$(getLabel $(echo $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g")) "
+    #~ done
+    #~ echo $memfiles
+    #~ if [[ $memfiles != "" ]]
+    #~ then
+        #~ gnuplot -e "column=10; \
+                    #~ files='$memfiles'; \
+                    #~ labels='$memlabels'; \
+                    #~ symbols='$symbols'; \
+                    #~ outputfilename='$1/mem_"$collectparam"_plot.pdf'; \
+                    #~ middling='50.0'; \
+                    #~ parts='1000000 6000000 0 300000 '; \
+                    #~ xlow=0;xhigh=1300" \
+                    #~ /scripts/plotmem_large.plt
+    #~ fi
+#~ done
 #~ respparam=100
 #~ for toolparam in "node" "nifi" "camel"
 #~ do
@@ -145,6 +145,7 @@ done
 
 for f in $(find $1 -name "logs_*" ! -name "*.pdf" | sort)
 do
-    echo "$f $(awk 'BEGIN{count1=0;avg1=0;count2=0;avg2=0}{if($3-$2>0){count1=count1+1;avg1=avg1+($3-$2)}}{if($4-$2>0){count2=count2+1;avg2=avg2+($4-$2)}}END{print "DB:",avg1/count1,"AVG:",avg2/count2,count1,count2}' $f)"
+    echo "$f"
+    echo "$(awk 'BEGIN{count1=0;avg1=0;count2=0;avg2=0}{if($3-$2>0){count1=count1+1;avg1=avg1+($3-$2)}}{if($4-$2>0){count2=count2+1;avg2=avg2+($4-$2)}}END{if(count1>0){print "DB:",avg1/count1};if(count2>0){print "AVG:",avg2/count2};print count1,count2}' $f)"
 done
 
