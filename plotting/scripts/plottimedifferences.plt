@@ -45,7 +45,7 @@ set grid ytics
 
 myfont = "Monospace,10"
 
-print sprintf(middlingcommand,"$3-$2","400","400")
+#print sprintf(middlingcommand,"$3-$2","400","400")
 
 plot for [i=1:words(files)] "<sort -k2 ".word(files,i)." | ".sprintf(middlingcommand,"400","$3-$2") \
 using ($1*factorx-(word(xoffsets,i)+0)):($2) \

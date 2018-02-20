@@ -38,7 +38,7 @@ myfont = "Monospace,10"
 unset xlabel
 unset ylabel
 set bmargin 2.5
-set label 1 "time [s]" at screen 0.5,0.02
+set label 1 "time [s]" at screen 0.5,0.03
 set lmargin 10.0
 set label 2 "memory used [kB]" at screen 0.02,0.5 rotate by 90 center
 
@@ -53,9 +53,10 @@ do for [i=1:words(files)] {
 set xtics nomirror
 set ytics nomirror
 set grid ytics
-set format y "%1.0t{/Symbol \327}10^{%L}"
+#set format y "%1.0t{/Symbol \327}10^{%L}"
+set format y "%1.0e"
 set xrange[xlow:xhigh]
-set xtics 300
+set xtics 150
 set grid xtics
 
 if (words(parts)>0){
@@ -76,20 +77,14 @@ if (words(parts)>0){
         unset border
         set border 3
         set format x "%1.0f"
-        set xtics nomirror
+        set xtics nomirror scale 1
         set ytics nomirror
         set yrange [word(parts,j):word(parts,j+1)]
-        set ytics 50000
+        set ytics 100000
         plot for [i=1:words(labels)] sprintf(wellform,word(files, i))." | ".sprintf(middlingcommand,middling,middling)\
         using ($1*factorx-(word(xoffsets,i)+0)):2 \
         title word(labels,i) with linespoints \
         pointtype word(symbols,i) lc rgb "black" font myfont tc rgb "black"
     }
-}else{
-    set xrange [*:*]
-    plot for [i=1:words(labels)] word(files, i) \
-    using ($1*factorx-(word(xoffsets,i)+0)):column \
-    title word(labels,i) with linespoints \
-    pointtype word(symbols,i) lc rgb "black" font myfont
 }
 

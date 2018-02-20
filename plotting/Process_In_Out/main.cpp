@@ -65,18 +65,20 @@ int main(int argc, char *argv[])
                 QVector<double> v(3);
                 object = QJsonDocument::fromJson(line.toUtf8()).object();
                 v[0] = object["time"].toDouble();
-                if(object["error"].isNull() && getID(line)!="")
+//                resultmap.insert(getID(line),v);
+                if(QJsonDocument::fromJson(line.toUtf8()).isObject()
+                   && getID(line)!="")
                 {
                     resultmap.insert(getID(line),v);
                 }
                 else
                 {
-                    if(!object["error"].isNull() &&
-                       !object["error"].toObject()["id"].isNull())
-                    {
-                        resultmap.insert(object["error"].toObject()["id"]
-                                .toString(),v);
-                    }
+//                    if(!object["error"].isNull())
+//                    {
+//                        resultmap.insert(getID(line),v);
+////                        resultmap.insert(object["error"].toObject()["id"]
+////                                .toString(),v);
+//                    }
                     errors.append(line+"\n");
                     errorcounter++;
                 }

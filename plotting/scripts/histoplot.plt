@@ -1,0 +1,50 @@
+set style histogram gap 1.0
+set boxwidth 1.0 absolute
+set key autotitle columnheader
+set style data histograms
+set style fill pattern border
+
+set datafile separator " "
+set decimalsign '.'
+
+unset border
+set border 3
+
+set terminal pdf size 10cm,6cm enhanced font 'Monospace,8' linewidth 1 rounded dashed
+set output filename."_plot".".pdf"
+myfont = "Monospace,10"
+
+unset xlabel
+unset ylabel
+set bmargin 2.5
+set label 1 "Amount of messages per second" at screen 0.5,0.03 center
+set lmargin 10.0
+set label 2 "mean response time [ms]" at screen 0.02,0.5 rotate by 90 center
+
+unset ytics
+set ytics nomirror
+
+set multiplot layout 2,1 margins 0.1,0.98,0.1,0.98 spacing 0.00,0.05
+    set key right top
+    set key box linetype 1 linecolor '#000000' linewidth 2
+    set key width +1
+    set key spacing 1.5
+    set key opaque
+    unset xtics
+    set yrange [x1:x2]
+    plot    filename using 2:xtic(1) lt -1, \
+            filename using ($0-0.25):($2+0.05*(x2-x1)):2 with labels notitle, \
+            filename using 3:xtic(1) lt -1, \
+            filename using ($0+0.00):($3+0.05*(x2-x1)):3 with labels notitle, \
+            filename using 4:xtic(1) lt -1, \
+            filename using ($0+0.25):($4+0.05*(x2-x1)):4 with labels notitle
+    set key off
+    unset xtics
+    set xtics nomirror
+    set yrange [x0:x1]
+    plot    filename using 2:xtic(1) lt -1, \
+            filename using ($0-0.25):($2+0.05*(x1-x0)):2 with labels notitle, \
+            filename using 3:xtic(1) lt -1, \
+            filename using ($0+0.00):($3+0.05*(x1-x0)):3 with labels notitle, \
+            filename using 4:xtic(1) lt -1, \
+            filename using ($0+0.25):($4+0.05*(x1-x0)):4 with labels notitle
