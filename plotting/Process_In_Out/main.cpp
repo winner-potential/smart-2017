@@ -70,7 +70,10 @@ int main(int argc, char *argv[])
                 if(QJsonDocument::fromJson(line.toUtf8()).isObject()
                    && getID(line)!="")
                 {
-                    resultmap.insert(getID(line),v);
+                    if(line.contains("started"))
+                    {
+                        resultmap.insert(getID(line),v);
+                    }
                     if(line.contains("error"))
                     {
                         othererrors.append(line+"\n");

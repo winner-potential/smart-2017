@@ -89,13 +89,19 @@ do
     echo $cpufiles
     if [[ $cpufiles != "" ]]
     then
+        if [[ $collectparam -lt 300 ]]
+        then
+            parts="30 250 0 30"
+        else
+            parts="100 300 0 100"
+        fi
         gnuplot -e "column=10; \
                     files='$cpufiles'; \
                     labels='$cpulabels'; \
                     symbols='$symbols'; \
                     outputfilename='$1/cpu_"$collectparam"_plot.pdf'; \
                     middling='10.0'; \
-                    parts='30 200 0 30'; \
+                    parts='$parts'; \
                     xlow=0;xhigh=600; \
                     setstuff=0" \
                     /scripts/plotcpu_large.plt
@@ -110,13 +116,19 @@ do
     echo $memfiles
     if [[ $memfiles != "" ]]
     then
+        if [[ $collectparam -lt 300 ]]
+        then
+            parts="1000000 6000000 0 300000 "
+        else
+            parts="600000 6000000 0 600000"
+        fi
         gnuplot -e "column=10; \
                     files='$memfiles'; \
                     labels='$memlabels'; \
                     symbols='$symbols'; \
                     outputfilename='$1/mem_"$collectparam"_plot.pdf'; \
                     middling='10.0'; \
-                    parts='1000000 6000000 0 300000 '; \
+                    parts='$parts'; \
                     xlow=0;xhigh=600" \
                     /scripts/plotmem_large.plt
     fi
