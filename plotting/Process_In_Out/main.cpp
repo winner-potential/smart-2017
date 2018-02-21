@@ -51,6 +51,7 @@ int main(int argc, char *argv[])
         QMap<QString,QVector<double>> resultmap;
 
         QString errors("");
+        QString othererrors("");
 
         QJsonObject object;
         QString line("");
@@ -70,6 +71,10 @@ int main(int argc, char *argv[])
                    && getID(line)!="")
                 {
                     resultmap.insert(getID(line),v);
+                    if(line.contains("error"))
+                    {
+                        othererrors.append(line+"\n");
+                    }
                 }
                 else
                 {
@@ -139,6 +144,8 @@ int main(int argc, char *argv[])
         {
             QTextStream in(&errorfile);
             in << errors;
+            in << "\n";
+            in << othererrors;
             in.flush();
             errorfile.close();
         }
