@@ -13,6 +13,7 @@
   "author": "Sebastian Apel",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "fastpriorityqueue": "^0.3.1"
   }
 }
