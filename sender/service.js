@@ -168,6 +168,6 @@ if (cluster.isMaster) {
         "energy": E
       }));
       req.end();
-    }, Math.max(0, new Date().getTime() - time));
+    }, Math.max(0, time - new Date().getTime()));
   });
 }
