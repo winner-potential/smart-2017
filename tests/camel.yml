@@ -4,7 +4,6 @@ services:
   cameltest:
     build:
       context: ../camel
-    restart: unless-stopped
     volumes:
       - "cameltest:/measurements:rw"
       - "../maven/datalab-example.war:/opt/jboss/wildfly/standalone/deployments/datalab-example.war:rw"

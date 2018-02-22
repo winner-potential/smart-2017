@@ -18,7 +18,6 @@ services:
   cameltest:
     build:
       context: camel
-    restart: unless-stopped
     volumes:
       - cameltest:/measurements:rw
     ports:
@@ -33,7 +32,6 @@ services:
   camelsender:
     build:
       context: sender
-    restart: unless-stopped
     volumes:
       - camelsender:/measurements:rw
     environment:

@@ -4,7 +4,6 @@ services:
   nifireceiver:
     build:
       context: receiver
-    restart: unless-stopped
 #    Only required for debugging
 #    ports:
 #      - "1881:1880"
@@ -13,7 +12,6 @@ services:
   nifitest:
     build:
       context: nifi
-    restart: unless-stopped
     volumes:
       - nifitest:/measurements:rw
     ports:
@@ -26,7 +24,6 @@ services:
   nifisender:
     build:
       context: sender
-    restart: unless-stopped
     volumes:
       - nifisender:/measurements:rw
     depends_on:

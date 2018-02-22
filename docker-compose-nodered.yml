@@ -4,7 +4,6 @@ services:
   noderedreceiver:
     build:
       context: receiver
-    restart: unless-stopped
     volumes:
       - noderedreceiver:/measurements:rw
 #    Only required for debugging
@@ -13,7 +12,6 @@ services:
   noderedtest:
     build:
       context: nodered
-    restart: unless-stopped
     volumes:
       - noderedtest:/measurements:rw
     environment:
@@ -26,7 +24,6 @@ services:
   noderedsender:
     build:
       context: sender
-    restart: unless-stopped
     volumes:
       - noderedsender:/measurements:rw
     depends_on:
