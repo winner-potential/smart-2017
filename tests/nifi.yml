@@ -4,7 +4,6 @@ services:
   nifitest:
     build:
       context: ../nifi
-    restart: unless-stopped
     volumes:
       - nifitest:/measurements:rw
     ports:

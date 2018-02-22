@@ -4,7 +4,6 @@ services:
   noderedtest:
     build:
       context: ../nodered
-    restart: unless-stopped
     ports:
       - "1881:1880"
     volumes:
