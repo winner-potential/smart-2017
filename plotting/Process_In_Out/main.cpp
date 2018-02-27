@@ -63,15 +63,15 @@ int main(int argc, char *argv[])
             while (!in.atEnd())
             {
                 line = in.readLine();
-                QVector<double> v(3);
+
                 object = QJsonDocument::fromJson(line.toUtf8()).object();
-                v[0] = object["time"].toDouble();
-//                resultmap.insert(getID(line),v);
                 if(QJsonDocument::fromJson(line.toUtf8()).isObject()
                    && getID(line)!="")
                 {
                     if(line.contains("started"))
                     {
+                        QVector<double> v(3);
+                        v[0] = object["time"].toDouble();
                         resultmap.insert(getID(line),v);
                     }
                     if(line.contains("error"))

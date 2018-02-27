@@ -77,7 +77,7 @@ echo "Created Nifi files"
 #~ done
 
 
-for collectparam in "100" "200" "400" "800"
+for collectparam in "200" "400" "800"
 do
     cpufiles=""
     cpulabels=""
@@ -100,9 +100,9 @@ do
                     labels='$cpulabels'; \
                     symbols='$symbols'; \
                     outputfilename='$1/cpu_"$collectparam"_plot.pdf'; \
-                    middling='10.0'; \
+                    middling='20.0'; \
                     parts='$parts'; \
-                    xlow=0;xhigh=600; \
+                    xlow=0;xhigh=1200; \
                     setstuff=0" \
                     /scripts/plotcpu_large.plt
     fi
@@ -127,42 +127,58 @@ do
                     labels='$memlabels'; \
                     symbols='$symbols'; \
                     outputfilename='$1/mem_"$collectparam"_plot.pdf'; \
-                    middling='10.0'; \
+                    middling='20.0'; \
                     parts='$parts'; \
-                    xlow=0;xhigh=600" \
+                    xlow=0;xhigh=1200" \
                     /scripts/plotmem_large.plt
     fi
 done
 
-respparam=100
-for toolparam in "node" "nifi" "camel"
-do
-    respfiles=""
-    resplabels=""
-    for f in $(find $1/responses/* -name "*$toolparam*-$respparam" ! -name "*.pdf" -type f | sort)
-    do
-        respfiles="$respfiles${f} "
-        resplabels="$resplabels$(echo $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g") "
-    done
-    echo $respfiles
-    if [[ $respfiles != "" ]]
-    then
-        gnuplot -e "column=10; \
-                    files='$respfiles'; \
-                    labels='$resplabels'; \
-                    symbols='$symbols'; \
-                    outputfilename='$1/response_"$respparam$toolparam"_plot.pdf'; \
-                    middling='20'; \
-                    parts='900 1800'" \
-                    /scripts/plottimedifferences.plt
-    fi
-done
+#~ respparam=100
+#~ for toolparam in "node" "nifi" "camel"
+#~ do
+    #~ respfiles=""
+    #~ resplabels=""
+    #~ for f in $(find $1/responses/* -name "*$toolparam*-$respparam" ! -name "*.pdf" -type f | sort)
+    #~ do
+        #~ respfiles="$respfiles${f} "
+        #~ resplabels="$resplabels$(echo $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g") "
+    #~ done
+    #~ echo $respfiles
+    #~ if [[ $respfiles != "" ]]
+    #~ then
+        #~ gnuplot -e "column=10; \
+                    #~ files='$respfiles'; \
+                    #~ labels='$resplabels'; \
+                    #~ symbols='$symbols'; \
+                    #~ outputfilename='$1/response_"$respparam$toolparam"_plot.pdf'; \
+                    #~ middling='20'; \
+                    #~ parts='900 1200'" \
+                    #~ /scripts/plottimedifferences.plt
+    #~ fi
+#~ done
 
-for f in $(find $1/responses -name "logs_*" ! -name "*.pdf" | sort)
+for f in $(find $1/responses -name "logs_*" ! -name "*.pdf" ! -name "*errors*" | sort -t- -k2)
 do
     echo "$f"
+    echo "Messages : $(cat $f | wc -l)"
+    echo "Single -10 : $(grep ' \-10' $f | wc -l)"
+    echo "Double -10 : $(grep ' \-10 \-10' $f | wc -l)"
+done
+
+num1=$(cat $1/responses/outgoing.json | grep -e 'nodered.yml-800.*error' | wc -l)
+num2=$(cat $1/responses/outgoing.json |grep -e 'nodered.yml-800.*error' | grep -e 'ETIMEDOUT' | wc -l)
+num3=$(cat $1/responses/outgoing.json |grep -e 'nodered.yml-800.*error' | grep -e 'EADDRNOTAVAIL' | wc -l)
+num4=$(cat $1/responses/outgoing.json |grep -e 'nodered.yml-800.*error' | grep -e 'ECONNRESET' | wc -l)
+echo "ALL Error NodeRED : $num1 (checked sum : $(( $num2+$num3+$num4 )))"
+echo "ETIMEDOUT Error NodeRED : $num2"
+echo "EADDRNOTAVAIL Error NodeRED : $num3"
+echo "ECONNRESET Error NodeRED : $num4"
+
+for f in $(find $1/responses -name "logs_*" ! -name "*.pdf" ! -name "*errors*" | sort -t- -k2)
+do
+    echo $f
     echo "$(awk 'BEGIN{count1=0;avg1=0;count2=0;avg2=0}{if($3-$2>0){count1=count1+1;avg1=avg1+($3-$2)}}{if($4-$2>0){count2=count2+1;avg2=avg2+($4-$2)}}END{if(count1>0){print "DB:",avg1/count1};if(count2>0){print "AVG:",avg2/count2};print count1,count2}' $f)"
-    echo ""
 done
 
 for f in $(find $1 -name "histo*" ! -name "*.pdf" | sort)
@@ -170,3 +186,4 @@ do
     gnuplot -e "filename='$f';x0=1;x1=500;x2=500000;y0=10000;y1=20000;y2=100000" /scripts/histoplot.plt
 done
 
+#~ #grep 'nifi.*":503' ./responses/outgoing.json | wc -l
