@@ -3,7 +3,7 @@ version: "2"
 services:
   cameltest:
     build:
-      context: ../camel
+      context: ./camel
     volumes:
       - "cameltest:/measurements:rw"
       - "../maven/datalab-example.war:/opt/jboss/wildfly/standalone/deployments/datalab-example.war:rw"
@@ -19,7 +19,7 @@ services:
       - "camelreceiver:${SENDER}"
   starter:
     build:
-      context: ../starter
+      context: ./starter
     environment:
       INSTALLATION: ${INSTALLATION}
       AMOUNT: ${AMOUNT}

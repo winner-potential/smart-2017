@@ -3,7 +3,7 @@ version: "2"
 services:
   noderedtest:
     build:
-      context: ../nodered
+      context: ./nodered
     ports:
       - "1881:1880"
     volumes:
@@ -14,7 +14,7 @@ services:
       MEASUREMENT_DELAY: ${DELAY}
   starter:
     build:
-      context: ../starter
+      context: ./starter
     environment:
       INSTALLATION: ${INSTALLATION}
       AMOUNT: ${AMOUNT}

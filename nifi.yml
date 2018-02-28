@@ -3,7 +3,7 @@ version: "2"
 services:
   nifitest:
     build:
-      context: ../nifi
+      context: ./nifi
     volumes:
       - nifitest:/measurements:rw
     ports:
@@ -17,7 +17,7 @@ services:
       MEASUREMENT_DELAY: ${DELAY}
   starter:
     build:
-      context: ../starter
+      context: ./starter
     environment:
       INSTALLATION: ${INSTALLATION}
       AMOUNT: ${AMOUNT}
