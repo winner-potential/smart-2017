@@ -14,12 +14,13 @@ factory = 1
 unset border
 set border 3
 
-set key right top
+set key left top
 set key box linetype 1 linecolor '#000000' linewidth 2
 set key width +1
 set key spacing 1.5
+set key opaque
 
-set terminal pdf size 20cm,12cm enhanced font 'Monospace,8' linewidth 1 rounded dashed
+set terminal pdf size 10cm,6cm enhanced font 'Monospace,8' linewidth 1 rounded dashed
 set output outputfilename
 
 set xlabel "time [ms]"
@@ -45,24 +46,22 @@ set grid ytics
 
 myfont = "Monospace,10"
 
-#print sprintf(middlingcommand,"$3-$2","400","400")
-
-plot for [i=1:words(files)] "<sort -k2 ".word(files,i)." | ".sprintf(middlingcommand,"400","$3-$2") \
+plot for [i=1:words(files)] "<sort -k2 ".word(files,i)." | ".sprintf(middlingcommand,middling,"$3-$2") \
 using ($1*factorx-(word(xoffsets,i)+0)):($2) \
-title "db".word(labels,i) with linespoints \
-pointtype word(symbols,i) lc rgb "black" font myfont, \
-for [i=1:words(files)] "<sort -k2 ".word(files,i)." | ".sprintf(middlingcommand,"400","$4-$2") \
+title "Database" with lines \
+lt 1 dt (5,5) lc rgb "black", \
+for [i=1:words(files)] "<sort -k2 ".word(files,i)." | ".sprintf(middlingcommand,middling,"$4-$2") \
 using ($1*factorx-(word(xoffsets,i)+0)):($2) \
-title "avg".word(labels,i) with linespoints \
-pointtype word(symbols,i+1) lc rgb "black" font myfont, \
+title "Aggregation" with lines \
+lt 1 lc rgb "black", \
 for [i=1:words(files)] "<sort -k2 ".word(files,i) \
 using ($2*factorx-(word(xoffsets,i)+0)):(($3-$2<0) ? -1000 : NaN) \
-title "dberror".word(labels,i) with linespoints \
-pointtype word(symbols,i+2) lc rgb "black" font myfont, \
-for [i=1:words(files)] "<sort -k2 ".word(files,i) \
-using ($2*factorx-(word(xoffsets,i)+0)):(($4-$2<0) ? -1000 : NaN) \
-title "avgerror".word(labels,i) with linespoints \
-pointtype word(symbols,i+3) lc rgb "black" font myfont
+title "Error" with linespoints \
+pointtype word(symbols,i+2) lc rgb "black" font myfont
+#for [i=1:words(files)] "<sort -k2 ".word(files,i) \
+#using ($2*factorx-(word(xoffsets,i)+0)):(($4-$2<0) ? -1000 : NaN) \
+#title "AGGError" with linespoints \
+#pointtype word(symbols,i+3) lc rgb "black" font myfont
 
 # pause -1
 

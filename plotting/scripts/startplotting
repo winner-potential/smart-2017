@@ -127,36 +127,36 @@ do
                     labels='$memlabels'; \
                     symbols='$symbols'; \
                     outputfilename='$1/mem_"$collectparam"_plot.pdf'; \
-                    middling='20.0'; \
+                    middling='2.0'; \
                     parts='$parts'; \
                     xlow=0;xhigh=1200" \
                     /scripts/plotmem_large.plt
     fi
 done
 
-#~ respparam=100
-#~ for toolparam in "node" "nifi" "camel"
-#~ do
-    #~ respfiles=""
-    #~ resplabels=""
-    #~ for f in $(find $1/responses/* -name "*$toolparam*-$respparam" ! -name "*.pdf" -type f | sort)
-    #~ do
-        #~ respfiles="$respfiles${f} "
-        #~ resplabels="$resplabels$(echo $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g") "
-    #~ done
-    #~ echo $respfiles
-    #~ if [[ $respfiles != "" ]]
-    #~ then
-        #~ gnuplot -e "column=10; \
-                    #~ files='$respfiles'; \
-                    #~ labels='$resplabels'; \
-                    #~ symbols='$symbols'; \
-                    #~ outputfilename='$1/response_"$respparam$toolparam"_plot.pdf'; \
-                    #~ middling='20'; \
-                    #~ parts='900 1200'" \
-                    #~ /scripts/plottimedifferences.plt
-    #~ fi
-#~ done
+respparam=800
+for toolparam in "node" "nifi" "camel"
+do
+    respfiles=""
+    resplabels=""
+    for f in $(find $1/responses/* -name "*$toolparam*-$respparam" ! -name "*.pdf" -type f | sort)
+    do
+        respfiles="$respfiles${f} "
+        resplabels="$resplabels$(echo $(basename $(dirname "${f}"))$(basename "${f}" ".txt") | sed -e "s/_//g" | sed -e "s/tests//g" | sed -e "s/test//g") "
+    done
+    echo $respfiles
+    if [[ $respfiles != "" ]]
+    then
+        gnuplot -e "column=10; \
+                    files='$respfiles'; \
+                    labels='$resplabels'; \
+                    symbols='$symbols'; \
+                    outputfilename='$1/response_"$respparam$toolparam"_plot.pdf'; \
+                    middling='3200'; \
+                    parts='900 1200'" \
+                    /scripts/plottimedifferences.plt
+    fi
+done
 
 for f in $(find $1/responses -name "logs_*" ! -name "*.pdf" ! -name "*errors*" | sort -t- -k2)
 do

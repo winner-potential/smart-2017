@@ -25,7 +25,7 @@ factory = 1
 unset border
 set border 3
 
-set key left top
+set key right top
 set key box linetype 1 linecolor '#000000' linewidth 2
 set key width +1
 set key spacing 1.5
